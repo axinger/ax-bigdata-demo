@@ -1,0 +1,15 @@
+CREATE TABLE source_person
+(
+    id STRING,
+    name STRING,
+    primary key (id) NOT ENFORCED
+)
+WITH (
+    'connector' = 'mysql-cdc',
+    'hostname' = 'localhost',
+    'port' = '3306',
+    'username' = 'root',
+    'password' = '12345678',
+    'database-name' = 'test_flink',
+    'table-name' = 'person'
+)
