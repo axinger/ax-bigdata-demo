@@ -12,8 +12,6 @@ class DemoApplicationTests {
     @Autowired
     private MyOrderService orderService;
 
-    @Autowired
-    private PersonService personService;
 
 
     @Test
@@ -22,15 +20,6 @@ class DemoApplicationTests {
         MyOrder order = new MyOrder();
         order.setNo("no-");
         orderService.save(order);
-
-    }
-
-    @Test
-    void contextLoads2() {
-
-        Person person = new Person() ;
-        person.setNo("no-");
-        personService.save(person);
 
     }
 }

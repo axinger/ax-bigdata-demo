@@ -51,7 +51,7 @@ public class OrderSink extends RichSinkFunction<String> {
     public void invoke(String value, Context context) throws Exception {
         //TranslateJson  将自定义的返回结果集转为具体实体
         ResponseModel responseModel = JSON.parseObject(value, ResponseModel.class);
-        log.info("order获得数据 = {}" ,responseModel);
+        log.info("order获得数据 = {},线程池 = {} , {}" ,responseModel,Thread.currentThread().getName(),Thread.currentThread().getId());
 
         if (CdcType.insert.equals(responseModel.getType())) {
             MyOrder order = JSON.parseObject(responseModel.getData(), MyOrder.class);
@@ -77,6 +77,4 @@ public class OrderSink extends RichSinkFunction<String> {
             ps.close();
         }
     }
-
-
 }
