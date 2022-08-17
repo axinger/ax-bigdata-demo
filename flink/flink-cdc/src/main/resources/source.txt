@@ -9,7 +9,7 @@ WITH (
     'hostname' = 'localhost',
     'port' = '3306',
     'username' = 'root',
-    'password' = '12345678',
-    'database-name' = 'test_flink',
-    'table-name' = 'person'
+    'password' = '123456',
+    'database-name' = 'flink_a',
+    'table-name' = 'user'
 )

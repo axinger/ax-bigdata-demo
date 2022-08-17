@@ -5,8 +5,8 @@ CREATE TABLE target_person (
 ) WITH (
  'connector' = 'jdbc',
  'driver' = 'com.mysql.cj.jdbc.Driver',
- 'url' = 'jdbc:mysql://localhost:3306/test_flink_target?serverTimezone=UTC&useSSL=false',
+ 'url' = 'jdbc:mysql://localhost:3306/flink_b?serverTimezone=UTC&useSSL=false',
  'username' = 'root',
- 'password' = '12345678',
- 'table-name' = 'person'
+ 'password' = '123456',
+ 'table-name' = 'user'
 )

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.axing.demo.web.mapper.MyOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.axing.demo.web.domain.MyOrder">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="no" column="no" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,no
+    </sql>
+</mapper>
