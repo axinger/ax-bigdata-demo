@@ -13,10 +13,11 @@
     <artifactId>springboot-flink-cdc-demo</artifactId>
     <version>0.0.1</version>
     <name>springboot-flink-cdc-demo</name>
-    <description>springboot 集成 flink-cdc </description>
+    <description>springboot 集成 flink-cdc</description>
     <properties>
         <java.version>1.8</java.version>
-        <flink.version>1.13.0</flink.version>
+        <!--        <flink.version>1.15.0</flink.version>-->
+        <flink.version>1.14.5</flink.version>
         <scala.binary.version>2.12</scala.binary.version>
     </properties>
     <dependencies>
@@ -37,15 +38,69 @@
             <version>${flink.version}</version>
         </dependency>
 
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.flink</groupId>-->
+        <!--            <artifactId>flink-core</artifactId>-->
+        <!--            <version>${flink.version}</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.flink</groupId>-->
+        <!--            <artifactId>flink-clients</artifactId>-->
+        <!--            <version>${flink.version}</version>-->
+        <!--        </dependency>-->
+
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.flink</groupId>-->
+        <!--            <artifactId>flink-streaming-java</artifactId>-->
+        <!--            <scope>provided</scope>-->
+        <!--            <version>${flink.version}</version>-->
+        <!--        </dependency>-->
+
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.flink</groupId>-->
+        <!--            <artifactId>flink-connector-jdbc</artifactId>-->
+        <!--            <version>${flink.version}</version>-->
+        <!--            <scope>provided</scope>-->
+        <!--        </dependency>-->
+
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.flink</groupId>-->
+        <!--            <artifactId>flink-table-planner-loader</artifactId>-->
+        <!--            <version>${flink.version}</version>-->
+        <!--            <scope>provided</scope>-->
+        <!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.flink</groupId>-->
+        <!--            <artifactId>flink-table-runtime</artifactId>-->
+        <!--            <version>${flink.version}</version>-->
+        <!--            <scope>provided</scope>-->
+        <!--        </dependency>-->
+
+        <!-- =====================1.13.0==================== -->
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+            <artifactId>flink-clients_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-jdbc_${scala.binary.version}</artifactId>
+            <version>${flink.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-clients_${scala.binary.version}</artifactId>
+            <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+            <scope>provided</scope>
             <version>${flink.version}</version>
         </dependency>
 
@@ -56,12 +111,6 @@
             <scope>provided</scope>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-jdbc_${scala.binary.version}</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.ververica</groupId>
@@ -94,7 +143,6 @@
             <scope>compile</scope>
             <version>1.18.24</version>
         </dependency>
-
 
     </dependencies>
 
