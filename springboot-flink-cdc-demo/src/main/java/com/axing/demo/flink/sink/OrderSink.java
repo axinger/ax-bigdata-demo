@@ -1,9 +1,11 @@
 package com.axing.demo.flink.sink;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson2.JSON;
 import com.axing.demo.flink.model.CdcType;
 import com.axing.demo.flink.model.ResponseModel;
-import com.axing.demo.web.domain.MyOrder;
+import com.axing.demo.web.domain.Order;
+import com.axing.demo.web.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
@@ -28,11 +30,13 @@ public class OrderSink extends RichSinkFunction<String> {
     String username = "root";
     String password = "123456";
 
-
+    OrderService orderService = null;
     @Override
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
-        connection = getConn();
+//        connection = getConn();
+         orderService = SpringUtil.getBean(OrderService.class);
+
     }
 
     private Connection getConn() {
@@ -54,16 +58,30 @@ public class OrderSink extends RichSinkFunction<String> {
         log.info("order获得数据 = {},线程池 = {} , {}" ,responseModel,Thread.currentThread().getName(),Thread.currentThread().getId());
 
         if (CdcType.insert.equals(responseModel.getType())) {
-            MyOrder order = JSON.parseObject(responseModel.getData(), MyOrder.class);
-            ps = connection.prepareStatement("insert into flink_b.order (id,no) values (?,?)");
-            ps.setLong(1, order.getId());
-            ps.setString(2, order.getNo());
+            Order order = JSON.parseObject(responseModel.getData(), Order.class);
+
             try {
-                int executeUpdate = ps.executeUpdate();
-                System.out.println("executeUpdate = " + executeUpdate);
+                boolean save = orderService.saveOrUpdate(order);
+                if (save) {
+                    log.info("插入数据库Order成功 = {}",order);
+                }else {
+                    log.error("插入数据库Order失败 = {}",order);
+                }
             }catch (Exception e){
-                log.error("插入数据库失败 = {}",e.getMessage());
+                log.error("插入数据库Order失败 = {}",e.getMessage());
             }
+
+
+
+//            ps = connection.prepareStatement("insert into flink_b.order (id,no) values (?,?)");
+//            ps.setLong(1, order.getId());
+//            ps.setString(2, order.getNo());
+//            try {
+//                int executeUpdate = ps.executeUpdate();
+//                System.out.println("executeUpdate = " + executeUpdate);
+//            }catch (Exception e){
+//                log.error("插入数据库失败 = {}",e.getMessage());
+//            }
         }
     }
 

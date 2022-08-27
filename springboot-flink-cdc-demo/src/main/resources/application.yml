@@ -4,9 +4,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/flink_a?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/flink_b?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
 
 
 flink:
   checkpoint-storage: /Users/xing/Desktop/flink-ck
-  last: /aff5b0b25b9edb61b17225072c5d8c86/chk-36
+  last: /d60d53151ee09168419e7fc17ea069fc/chk-12

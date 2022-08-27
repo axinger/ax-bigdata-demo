@@ -1,7 +1,7 @@
 package com.axing.demo;
 
-import com.axing.demo.web.domain.MyOrder;
-import com.axing.demo.web.service.MyOrderService;
+import com.axing.demo.web.domain.Order;
+import com.axing.demo.web.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,14 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 class DemoApplicationTests {
 
     @Autowired
-    private MyOrderService orderService;
+    private OrderService orderService;
 
 
 
     @Test
     void contextLoads() {
 
-        MyOrder order = new MyOrder();
+        Order order = new Order();
         order.setNo("no-");
         orderService.save(order);
 

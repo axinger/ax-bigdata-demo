@@ -9,21 +9,26 @@ import lombok.Data;
 
 /**
  * 
- * @TableName my_order
+ * @TableName order
  */
-@TableName(value ="my_order")
+@TableName(value ="t_order")
 @Data
-public class MyOrder implements Serializable {
+public class Order implements Serializable {
     /**
      * 
      */
-    @TableId(type = IdType.AUTO)
+    @TableId
     private Long id;
 
     /**
-     * 
+     * 订单号
      */
     private String no;
+
+    /**
+     * 货物名称
+     */
+    private String name;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

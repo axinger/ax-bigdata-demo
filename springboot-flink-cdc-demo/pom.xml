@@ -17,7 +17,8 @@
     <properties>
         <java.version>1.8</java.version>
         <!--        <flink.version>1.15.0</flink.version>-->
-        <flink.version>1.14.5</flink.version>
+<!--        <flink.version>1.14.5</flink.version>-->
+        <flink.version>1.13.0</flink.version>
         <scala.binary.version>2.12</scala.binary.version>
     </properties>
     <dependencies>
@@ -142,6 +143,12 @@
             <artifactId>lombok</artifactId>
             <scope>compile</scope>
             <version>1.18.24</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.3</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

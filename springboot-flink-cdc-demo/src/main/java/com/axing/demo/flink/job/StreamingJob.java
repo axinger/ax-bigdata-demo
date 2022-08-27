@@ -1,5 +1,6 @@
 package com.axing.demo.flink.job;
 
+import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSON;
 import com.axing.demo.flink.config.CheckPointConfig;
 import com.axing.demo.flink.config.MyJsonSchema;
@@ -13,6 +14,7 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -59,24 +61,29 @@ public class StreamingJob implements ApplicationRunner {
                     .password("123456")
                     .serverTimeZone("Asia/Shanghai")
                     .databaseList("flink_a")
-                    .tableList("flink_a.my_order", "flink_a.user")
+                    .tableList("flink_a.t_order", "flink_a.user")
                     .deserializer(new MyJsonSchema())
                     .build();
 
-            Configuration configuration = new Configuration();
+//            Configuration configuration = new Configuration();
+
             // read checkpoint record
             // 第一次读取需要注释此行，后续增加表时，开启此行，flink-ck后 ‘27b27e36750ff997a7bd3b9933c5f3c9/chk-12404’换成存储路径下对应文件夹即可，实现旧表增量读取，新表全量读取
 //            configuration.setString("execution.savepoint.path", checkPointConfig.fullPath());
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(configuration);
-            env.setRestartStrategy(RestartStrategies.noRestart());
+//            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(configuration);
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+//            env.setRestartStrategy(RestartStrategies.noRestart());
+            /// 设置模式, 仅一次语义
+            env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
 //            StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
             // enable checkpoint
-//            env.enableCheckpointing(3000);
+            env.enableCheckpointing(3000);
             // set local storage path
-//            env.getCheckpointConfig().setCheckpointStorage(checkPointConfig.fileStorage());
+            env.getCheckpointConfig().setCheckpointStorage(checkPointConfig.fileStorage());
 
             // 多表进行分片处理
-            OutputTag<String> orderTag = new OutputTag<>("flink_a.my_order", Types.STRING);
+            OutputTag<String> orderTag = new OutputTag<>("flink_a.t_order", Types.STRING);
             OutputTag<String> userTag = new OutputTag<>("flink_a.user", Types.STRING);
 
             DataStreamSource<String> mySQL_source = env.fromSource(cdcMysqlSource, WatermarkStrategy.noWatermarks(), "MySQL Source");
@@ -89,7 +96,8 @@ public class StreamingJob implements ApplicationRunner {
                         @Override
                         public void processElement(ResponseModel value, Context context, Collector<String> collector) {
                             String jsonString = JSON.toJSONString(value);
-                            if ("my_order".equals(value.getTable())) {
+                            log.info("flink sql 表 = {}",jsonString);
+                            if ("t_order".equals(value.getTable())) {
                                 context.output(orderTag, jsonString);
                             } else if ("user".equals(value.getTable())) {
                                 context.output(userTag, jsonString);
@@ -104,7 +112,7 @@ public class StreamingJob implements ApplicationRunner {
             //自定义sink
             orderStream.addSink(new OrderSink());
             userStream.addSink(new UserSink());
-            env.execute("flinkCdc");
+            env.execute("flinkCdc_01");
         } catch (Exception e) {
             log.error("启动失败 = {}, = {}",e.getMessage(),e.getCause().getMessage());
 

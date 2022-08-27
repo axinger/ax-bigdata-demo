@@ -1,8 +1,8 @@
 package com.axing.demo.web.controller;
 
-import com.axing.demo.web.domain.MyOrder;
+import com.axing.demo.web.domain.Order;
 import com.axing.demo.web.domain.User;
-import com.axing.demo.web.service.MyOrderService;
+import com.axing.demo.web.service.OrderService;
 import com.axing.demo.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import java.util.List;
 public class IndexController {
 
     @Autowired
-    private MyOrderService orderService;
+    private OrderService orderService;
 
 
     @Autowired
@@ -25,10 +25,10 @@ public class IndexController {
     @GetMapping("/add/order")
     public Object addOrder() {
 
-        List<MyOrder> list = new ArrayList<>();
+        List<Order> list = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
-            MyOrder order = new MyOrder();
+            Order order = new Order();
             order.setNo("no-"+i);
             list.add(order);
         }
