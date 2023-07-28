@@ -8,8 +8,8 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
 
-// 流处理
-public class StreamDemo {
+//无界流
+public class StreamUnboundedDemo {
 
     public static void main(String[] args) throws Exception {
 
@@ -17,8 +17,8 @@ public class StreamDemo {
 
         StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        //读取文件
-        DataStreamSource<String> read = environment.readTextFile("12.txt");
+        //读取数据, socket
+        DataStreamSource<String> read = environment.socketTextStream("192.168.101.143", 7777);
 
 
         //切分,转换二元组
