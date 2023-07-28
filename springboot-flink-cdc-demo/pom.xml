@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.axing</groupId>
+    <groupId>com.github.axinger</groupId>
     <artifactId>springboot-flink-cdc-demo</artifactId>
     <version>0.0.1</version>
     <name>springboot-flink-cdc-demo</name>

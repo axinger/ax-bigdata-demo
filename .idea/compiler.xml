@@ -8,8 +8,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="springboot-flink-cdc-demo" />
-        <module name="flink-cdc" />
         <module name="ax-flink-cdc-demo" />
+        <module name="fink-1.17" />
+        <module name="flink-cdc" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

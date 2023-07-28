@@ -1,1 +1,0 @@
-insert into target_person select * from source_person

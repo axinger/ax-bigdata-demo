@@ -1,0 +1,3 @@
+hello java
+hello word
+hello C++
