@@ -8,8 +8,7 @@
     <artifactId>ax-big-data-demo</artifactId>
     <version>1.0.0</version>
     <modules>
-        <module>flink</module>
-        <module>fink-1.17</module>
+        <module>fink-1.17-demo</module>
     </modules>
     <packaging>pom</packaging>
 
