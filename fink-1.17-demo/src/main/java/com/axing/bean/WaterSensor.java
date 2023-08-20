@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WaterSensor {
-    private String id;
-    private Long ts;
-    private Integer vc;
+    // flink 要求为public
+    // 无参构造起
+    public String id;
+    public Long ts;
+    public Integer vc;
 }
