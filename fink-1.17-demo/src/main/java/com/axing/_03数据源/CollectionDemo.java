@@ -1,9 +1,7 @@
-package com.axing._03source;
+package com.axing._03数据源;
 
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
-import java.util.Arrays;
 
 
 public class CollectionDemo {

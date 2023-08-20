@@ -1,39 +1,46 @@
-package com.axing._05aggreagte;
+package com.axing._04转换;
 
 import com.axing.bean.WaterSensor;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 
-public class KeyBy1Demo {
+public class MapDemo {
 
     public static void main(String[] args) throws Exception {
 
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment
                 .getExecutionEnvironment();
-        env.setParallelism(3);
+        env.setParallelism(1);
 
 
         DataStreamSource<WaterSensor> source = env.fromElements(
                 new WaterSensor("s1", 1L, 11),
-                new WaterSensor("s1", 12L, 122),
+                new WaterSensor("s1", 1L, 12),
                 new WaterSensor("s2", 2L, 22),
                 new WaterSensor("s3", 3L, 33)
         );
 
 
+        // lambda表达式
+//        source.map(value -> value.id)
+//        .print();
 
-        /*  keyBy 不是转换算子,只是对数据分区
-         *  keyBy 分区和分组区别
-         *  keyBy是对数据分组,保证相同的key的数据,在同一个分区:  s1和s1 在同一个并行度中(前面的序号)
-         *  分区:一个子任务可以理解为一个分区
-         *
-         */
 
-        source
-                .keyBy(value -> value.id)
-                .print();
+        // 定义类,封装逻辑
+//        source
+//                .filter(new WaterSensorFilter())
+//                .filter(new WaterSensorFilter2("s2"))
+//                .map(new WaterSensorMap())
+//                .print();
+
+//        source
+//                .flatMap(new WaterSensorFlatMap()) // 一进多出
+//                .print();
+
+
+
 
         env.execute();
     }
