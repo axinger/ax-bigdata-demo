@@ -12,14 +12,14 @@
     <artifactId>fink-1.17-demo</artifactId>
 
     <properties>
-        <fink.version>1.17.0</fink.version>
+        <flink.version>1.17.0</flink.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-streaming-java</artifactId>
-            <version>${fink.version}</version>
+            <version>${flink.version}</version>
             <!--不打包到jar中-->
             <scope>provided</scope>
         </dependency>
@@ -27,7 +27,20 @@
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-clients</artifactId>
-            <version>${fink.version}</version>
+            <version>${flink.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-files</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.28</version>
             <scope>provided</scope>
         </dependency>
 

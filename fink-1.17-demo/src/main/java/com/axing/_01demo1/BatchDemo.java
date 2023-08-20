@@ -1,4 +1,4 @@
-package com.axing;
+package com.axing._01demo1;
 
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.ExecutionEnvironment;

@@ -1,4 +1,4 @@
-package com.axing;
+package com.axing._01demo1;
 
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -14,8 +14,8 @@ public class StreamUnboundedDemo {
     public static void main(String[] args) throws Exception {
 
         //执行环境
-
-        StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment environment = StreamExecutionEnvironment
+                .getExecutionEnvironment();
 //        environment.setParallelism(3);//全局并行度
 
         //本地开发,有web页面的
