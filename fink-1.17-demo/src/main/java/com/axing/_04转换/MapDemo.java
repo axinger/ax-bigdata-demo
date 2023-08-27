@@ -40,8 +40,6 @@ public class MapDemo {
 //                .print();
 
 
-
-
         env.execute();
     }
 }

@@ -2,9 +2,7 @@ package com.axing._07分流;
 
 import com.axing.bean.WaterSensor;
 import com.axing.func.WaterSensorBeanMap;
-import lombok.extern.java.Log;
 import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;

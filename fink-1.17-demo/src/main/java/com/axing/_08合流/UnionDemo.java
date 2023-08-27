@@ -1,15 +1,8 @@
 package com.axing._08合流;
 
-import com.axing.bean.WaterSensor;
-import com.axing.func.WaterSensorBeanMap;
-import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.util.Collector;
-import org.apache.flink.util.OutputTag;
 
 //无界流
 public class UnionDemo {
@@ -29,7 +22,7 @@ public class UnionDemo {
 
 //        DataStream<String> union = source1.union(source2).union(source3.map(String::valueOf));
 
-        DataStream<String> union = source1.union(source2,source3.map(String::valueOf));
+        DataStream<String> union = source1.union(source2, source3.map(String::valueOf));
 
         union.print();
 

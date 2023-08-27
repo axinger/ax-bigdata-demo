@@ -15,8 +15,7 @@ public class CollectionDemo {
 
         DataStreamSource<Integer> source = env
 //                .fromCollection(Arrays.asList(1, 22, 33))
-                .fromElements(1,22,33)
-                ;
+                .fromElements(1, 22, 33);
 
         source.print();
         env.execute();

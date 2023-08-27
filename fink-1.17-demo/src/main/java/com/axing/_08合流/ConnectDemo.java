@@ -42,7 +42,7 @@ public class ConnectDemo {
 
             @Override
             public String map2(Integer value) throws Exception {
-                return value+"";
+                return value + "";
             }
         }).print();
 
