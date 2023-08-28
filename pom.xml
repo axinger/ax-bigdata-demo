@@ -8,7 +8,7 @@
     <artifactId>ax-big-data-demo</artifactId>
     <version>1.0.0</version>
     <modules>
-        <module>ax-hadoop-demo</module>
+        <module>hadoop-demo</module>
         <module>fink-1.17-demo</module>
     </modules>
     <packaging>pom</packaging>

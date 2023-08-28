@@ -11,7 +11,7 @@
 
     <packaging>pom</packaging>
 
-    <artifactId>ax-hadoop-demo</artifactId>
+    <artifactId>hadoop-demo</artifactId>
 
     <modules>
         <module>HdfsDemo</module>
