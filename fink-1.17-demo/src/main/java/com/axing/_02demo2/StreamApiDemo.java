@@ -22,9 +22,6 @@ public class StreamApiDemo {
                 .getExecutionEnvironment(conf);
 //        environment.setParallelism(3);//全局并行度
 
-        //本地开发,有web页面的
-//        StreamExecutionEnvironment environment = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
-
         //读取数据, socket
         DataStreamSource<String> read = environment.socketTextStream("hadoop102", 7777);
 
