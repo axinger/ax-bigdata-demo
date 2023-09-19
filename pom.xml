@@ -10,6 +10,7 @@
     <modules>
         <module>hadoop-demo</module>
         <module>fink-1.17-demo</module>
+        <module>flink-cdc-demo</module>
     </modules>
     <packaging>pom</packaging>
 
