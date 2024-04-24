@@ -17,7 +17,7 @@ public class Windows1Demo {
         environment.setParallelism(1);
 
 
-        SingleOutputStreamOperator<WaterSensor> ds = environment.socketTextStream("hadoop102", 7777)
+        SingleOutputStreamOperator<WaterSensor> ds = environment.socketTextStream("hadoop102", 8888)
                 .map(new WaterSensorBeanMap());
 
 
