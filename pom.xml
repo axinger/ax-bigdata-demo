@@ -6,10 +6,10 @@
 
     <groupId>com.github.axinger</groupId>
     <artifactId>ax-big-data-demo</artifactId>
-    <version>1.0.0</version>
+    <version>2024.09.01-1.18</version>
     <modules>
         <module>hadoop-demo</module>
-        <module>fink-demo</module>
+        <module>fink-demo-01</module>
         <module>flink-cdc-demo</module>
     </modules>
     <packaging>pom</packaging>
@@ -208,4 +208,20 @@
 
         </dependencies>
     </dependencyManagement>
+
+
+
+    <build>
+
+        <plugins>
+            <!-- 统一管理父子模块的版本号 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
