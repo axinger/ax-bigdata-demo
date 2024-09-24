@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.axinger</groupId>
-        <artifactId>ax-big-data-demo</artifactId>
+        <artifactId>ax-flink-demo</artifactId>
         <version>2024.09.01-1.18</version>
     </parent>
 
