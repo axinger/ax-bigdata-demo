@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
 
 //无界流
-public class StreamUnboundedDemo {
+public class 无界流Demo {
 
     public static void main(String[] args) throws Exception {
 
@@ -22,6 +22,11 @@ public class StreamUnboundedDemo {
 //        StreamExecutionEnvironment environment = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
 
         //读取数据, socket
+        /*
+         * 开启一个端口  nc -lk 7777
+         * 监听 nc localhost 7777
+         * 输入 hello java
+         */
         DataStreamSource<String> read = environment.socketTextStream("hadoop102", 7777);
 
 

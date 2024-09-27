@@ -24,6 +24,7 @@ public class KafkaSourceDemo {
                 .setTopics("test_1")
                 .setValueOnlyDeserializer(new SimpleStringSchema()) //只对value序列化
                 .setStartingOffsets(OffsetsInitializer.latest()) // 起始位置,默认earliest
+//                .setValueOnlyDeserializer(new SimpleStringSchema()) //反序列化
                 .build();
 
         DataStreamSource<String> source = env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "kafkaSource");

@@ -22,38 +22,48 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.cdc.connectors.mysql.source.MySqlSource;
 import org.apache.flink.cdc.connectors.mysql.table.StartupOptions;
 import org.apache.flink.cdc.debezium.JsonDebeziumDeserializationSchema;
+import org.apache.flink.streaming.api.CheckpointingMode;
+import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
+import java.util.Properties;
 
 public class FlinkCdc01_Test1 {
 
     public static void main(String[] args) throws Exception {
 
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-//        env.setParallelism(1);
+        env.setParallelism(1);
+        env.enableCheckpointing(5000);
 
-        env.enableCheckpointing(3000);
-//        env.getCheckpointConfig().setCheckpointTimeout(1000L);
-//        env.getCheckpointConfig().setCheckpointStorage("file:///D:/flink_point");
-//        env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
-//        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1); // 同时只存在一个
+        CheckpointConfig checkpointConfig = env.getCheckpointConfig();
+        checkpointConfig.setCheckpointTimeout(6000);
+        checkpointConfig.setCheckpointStorage("file:///D:/flink_point/mysql");
+        checkpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+        checkpointConfig.setMaxConcurrentCheckpoints(1); // 同时只存在一个
+        checkpointConfig.setMinPauseBetweenCheckpoints(2000); //两个检测点之间最小间隔
 
+        // mysql8
+        Properties properties =new Properties();
+        properties.setProperty("useSSL", "false");
+        properties.setProperty("allowPublicKeyRetrieval", "true");
 
         MySqlSource<String> mySqlSource = MySqlSource.<String>builder()
                 .hostname("localhost")
+//                .hostname("hadoop102")
                 .port(3306)
                 .username("root")
                 .password("123456")
                 .databaseList("ax_test") //多个库
-//                .tableList("ax_test.t2") // 多个库.多个表
-                .tableList("ax_test.*") // 多个库.多个表
+                .tableList("ax_test.t1") // 多个库.多个表
                 .startupOptions(StartupOptions.initial())
+//                .startupOptions(StartupOptions.earliest())
                 .deserializer(new JsonDebeziumDeserializationSchema())
+                .jdbcProperties(properties)
                 .build();
 
-        env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "mysqlSource2")
-                // 设置 source 节点的并行度为 4
-                .setParallelism(4)
-                .print().setParallelism(1); // 设置 sink 节点并行度为 1
+        env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "mysql-source2222")
+                .print();
 
         env.execute("Print MySQL Snapshot + Binlog");
 
