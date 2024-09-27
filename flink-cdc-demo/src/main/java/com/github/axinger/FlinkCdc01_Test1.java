@@ -23,10 +23,7 @@ import org.apache.flink.cdc.connectors.mysql.source.MySqlSource;
 import org.apache.flink.cdc.connectors.mysql.table.StartupOptions;
 import org.apache.flink.cdc.debezium.JsonDebeziumDeserializationSchema;
 import org.apache.flink.streaming.api.CheckpointingMode;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
-import java.time.LocalDateTime;
 
 
 public class FlinkCdc01_Test1 {
@@ -36,11 +33,11 @@ public class FlinkCdc01_Test1 {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        env.enableCheckpointing(5000L);
-        env.getCheckpointConfig().setCheckpointTimeout(1000L);
-        env.getCheckpointConfig().setCheckpointStorage("file:///D:/flink_point");
-        env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
-        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1); // 同时只存在一个
+        env.enableCheckpointing(3000);
+//        env.getCheckpointConfig().setCheckpointTimeout(1000L);
+//        env.getCheckpointConfig().setCheckpointStorage("file:///D:/flink_point");
+//        env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+//        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1); // 同时只存在一个
 
 
         MySqlSource<String> mySqlSource = MySqlSource.<String>builder()
@@ -48,17 +45,18 @@ public class FlinkCdc01_Test1 {
                 .port(3306)
                 .username("root")
                 .password("123456")
-                .databaseList("ax_test")
-                .tableList("ax_test.t1")
+                .databaseList("ax_test") //多个库
+                .tableList("ax_test.t2") // 多个库.多个表
                 .startupOptions(StartupOptions.initial())
                 .deserializer(new JsonDebeziumDeserializationSchema())
                 .build();
 
+        env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "mysqlSource2")
+                // 设置 source 节点的并行度为 4
+//                .setParallelism(4)
+                .print().setParallelism(1); // 设置 sink 节点并行度为 1
 
-        DataStreamSource<String> mysqlSource = env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "mysqlSource");
-        mysqlSource.print("打印结果=" + LocalDateTime.now() + ":");
-
-        env.execute();
+        env.execute("Print MySQL Snapshot + Binlog");
 
     }
 }
