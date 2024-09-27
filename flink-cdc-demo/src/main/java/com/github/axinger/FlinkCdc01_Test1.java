@@ -29,7 +29,7 @@ public class FlinkCdc01_Test1 {
     public static void main(String[] args) throws Exception {
 
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(1);
+//        env.setParallelism(1);
 
         env.enableCheckpointing(3000);
 //        env.getCheckpointConfig().setCheckpointTimeout(1000L);
@@ -44,14 +44,15 @@ public class FlinkCdc01_Test1 {
                 .username("root")
                 .password("123456")
                 .databaseList("ax_test") //多个库
-                .tableList("ax_test.t2") // 多个库.多个表
+//                .tableList("ax_test.t2") // 多个库.多个表
+                .tableList("ax_test.*") // 多个库.多个表
                 .startupOptions(StartupOptions.initial())
                 .deserializer(new JsonDebeziumDeserializationSchema())
                 .build();
 
         env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "mysqlSource2")
                 // 设置 source 节点的并行度为 4
-//                .setParallelism(4)
+                .setParallelism(4)
                 .print().setParallelism(1); // 设置 sink 节点并行度为 1
 
         env.execute("Print MySQL Snapshot + Binlog");
