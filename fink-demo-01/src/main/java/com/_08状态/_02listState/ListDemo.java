@@ -1,8 +1,8 @@
 package com._08状态._02listState;
 
 import cn.hutool.core.stream.StreamUtil;
-import com.axing.bean.WaterSensor;
-import com.axing.func.WaterSensorBeanMap;
+import com.github.axinger.bean.WaterSensor;
+import com.github.axinger.func.WaterSensorBeanMap;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;

@@ -1,8 +1,8 @@
 package com._08状态._01值状态;
 
 import cn.hutool.core.util.StrUtil;
-import com.axing.bean.WaterSensor;
-import com.axing.func.WaterSensorBeanMap;
+import com.github.axinger.bean.WaterSensor;
+import com.github.axinger.func.WaterSensorBeanMap;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;

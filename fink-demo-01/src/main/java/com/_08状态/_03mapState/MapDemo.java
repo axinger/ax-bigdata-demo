@@ -2,11 +2,9 @@ package com._08状态._03mapState;
 
 import cn.hutool.core.stream.StreamUtil;
 import cn.hutool.core.util.StrUtil;
-import com.axing.bean.WaterSensor;
-import com.axing.func.WaterSensorBeanMap;
+import com.github.axinger.bean.WaterSensor;
+import com.github.axinger.func.WaterSensorBeanMap;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.state.ListState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.MapState;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;
@@ -17,9 +15,6 @@ import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
 
 import java.time.Duration;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

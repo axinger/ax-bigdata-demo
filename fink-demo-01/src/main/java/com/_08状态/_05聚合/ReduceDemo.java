@@ -1,7 +1,7 @@
 package com._08状态._05聚合;
 
-import com.axing.bean.WaterSensor;
-import com.axing.func.WaterSensorBeanMap;
+import com.github.axinger.bean.WaterSensor;
+import com.github.axinger.func.WaterSensorBeanMap;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.state.AggregatingState;
