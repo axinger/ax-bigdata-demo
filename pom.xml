@@ -15,14 +15,13 @@
     <packaging>pom</packaging>
 
     <properties>
-        <target.java.version>1.8</target.java.version>
+        <target.java.version>17</target.java.version>
         <maven.compiler.source>${target.java.version}</maven.compiler.source>
         <maven.compiler.target>${target.java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <flink.version>1.18.0</flink.version>
+        <flink.version>1.18.1</flink.version>
         <scala.version>2.12</scala.version>
         <flink-connector.version>3.2.0-1.18</flink-connector.version>
-        <flink-cdc.version>2.4.2</flink-cdc.version>
         <hbase.version>2.4.11</hbase.version>
         <fastjson.version>2.0.53</fastjson.version>
         <log4j.version>2.23.1</log4j.version>
@@ -103,10 +102,16 @@
             </dependency>
 
 
+<!--            <dependency>-->
+<!--                <groupId>com.ververica</groupId>-->
+<!--                <artifactId>flink-connector-mysql-cdc</artifactId>-->
+<!--                <version>3.0.0</version>-->
+<!--            </dependency>-->
+
             <dependency>
-                <groupId>com.ververica</groupId>
+                <groupId>org.apache.flink</groupId>
                 <artifactId>flink-connector-mysql-cdc</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.0</version>
             </dependency>
 
 
@@ -134,7 +139,7 @@
             <dependency>
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>
-                <version>8.0.33</version>
+                <version>8.4.0</version>
             </dependency>
 
             <!--            <dependency>-->
