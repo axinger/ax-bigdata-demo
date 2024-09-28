@@ -26,20 +26,25 @@ import com.alibaba.fastjson2.TypeReference;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.common.state.ReducingState;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
+import org.apache.flink.api.common.state.*;
 import org.apache.flink.api.common.typeinfo.Types;
+import org.apache.flink.api.connector.source.Source;
 import org.apache.flink.cdc.connectors.mysql.source.MySqlSource;
 import org.apache.flink.cdc.connectors.mysql.table.StartupOptions;
 import org.apache.flink.cdc.debezium.JsonDebeziumDeserializationSchema;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.CheckpointingMode;
+import org.apache.flink.streaming.api.datastream.BroadcastConnectedStream;
+import org.apache.flink.streaming.api.datastream.BroadcastStream;
+import org.apache.flink.streaming.api.datastream.ConnectedStreams;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
+import org.apache.kafka.common.protocol.types.Field;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -161,5 +166,58 @@ public class FlinkCdc01_Test1 {
                 .print("处理后数据");
     }
 
+    // streamSource 非广播流
+    // streamSource2 广播流
+    private static void broadcast(DataStreamSource<JSONObject> streamSource,  DataStreamSource<JSONObject> streamSource2 ) {
+
+        final String top = "a";
+
+        MapStateDescriptor<String, JSONObject> mapStateDescriptor = new MapStateDescriptor<>(top, String.class, JSONObject.class);
+
+        BroadcastStream<JSONObject> broadcast = streamSource2.broadcast(mapStateDescriptor);
+
+
+        BroadcastConnectedStream<JSONObject, JSONObject> connect = streamSource.connect(broadcast);
+
+
+        connect.process(new BroadcastProcessFunction<JSONObject,JSONObject,JSONObject>(){
+
+            @Override
+            public void open(Configuration parameters) throws Exception {
+                super.open(parameters);
+            }
+
+            @Override
+            public void processElement(JSONObject value, BroadcastProcessFunction<JSONObject, JSONObject, JSONObject>.ReadOnlyContext ctx, Collector<JSONObject> out) throws Exception {
+
+
+                ReadOnlyBroadcastState<String, JSONObject> broadcastState = ctx.getBroadcastState(mapStateDescriptor);
+                JSONObject jsonObject = broadcastState.get("");
+
+            }
+
+            // 广播流
+            @Override
+            public void processBroadcastElement(JSONObject value, BroadcastProcessFunction<JSONObject, JSONObject, JSONObject>.Context ctx, Collector<JSONObject> out) throws Exception {
+
+                // 获取广播状态
+                BroadcastState<String, JSONObject> broadcastState = ctx.getBroadcastState(mapStateDescriptor);
+
+                //删除状态
+                broadcastState.remove("lastVcStatus");
+
+                // 获取状态
+                JSONObject jsonObject = broadcastState.get("");
+
+                //
+                broadcastState.put("", jsonObject);
+
+            }
+        });
+
+//        streamSource.addSink()
+//        streamSource.sinkTo()
+
+    }
 
 }
