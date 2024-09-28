@@ -1,4 +1,4 @@
-package com._08状态._05聚合;
+package com.github.axinger._08状态._05聚合;
 
 import com.github.axinger.bean.WaterSensor;
 import com.github.axinger.func.WaterSensorBeanMap;

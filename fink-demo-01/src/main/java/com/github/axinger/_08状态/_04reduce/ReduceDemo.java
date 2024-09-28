@@ -1,12 +1,10 @@
-package com._08状态._03mapState;
+package com.github.axinger._08状态._04reduce;
 
-import cn.hutool.core.stream.StreamUtil;
-import cn.hutool.core.util.StrUtil;
 import com.github.axinger.bean.WaterSensor;
 import com.github.axinger.func.WaterSensorBeanMap;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.state.MapState;
-import org.apache.flink.api.common.state.MapStateDescriptor;
+import org.apache.flink.api.common.state.ReducingState;
+import org.apache.flink.api.common.state.ReducingStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -15,10 +13,8 @@ import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
 
 import java.time.Duration;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class MapDemo {
+public class ReduceDemo {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -37,27 +33,25 @@ public class MapDemo {
         operator.keyBy(WaterSensor::getId)
                 .process(new KeyedProcessFunction<String, WaterSensor, String>() {
 
-                    MapState<Integer, Integer> lastVcStatus;
+                    ReducingState<Integer> lastVcStatus;
 
                     @Override
                     public void open(Configuration parameters) throws Exception {
                         super.open(parameters);
                         // 初始化状态
-                        lastVcStatus = getRuntimeContext().getMapState(new MapStateDescriptor<>("lastVcStatus", Types.INT, Types.INT));
+                        lastVcStatus = getRuntimeContext().getReducingState(new ReducingStateDescriptor<>("lastVcStatus",
+                                Integer::sum,
+                                Types.INT));
                     }
 
                     @Override
                     public void processElement(WaterSensor value, KeyedProcessFunction<String, WaterSensor, String>.Context ctx, Collector<String> out) throws Exception {
-
-                        Integer i = Optional.ofNullable(lastVcStatus.get(value.getVc())).orElse(0);
-                        lastVcStatus.put(value.getVc(), ++i);
-                        String collect = StreamUtil.of(lastVcStatus.entries())
-                                .map(val -> StrUtil.format("{}-{}", val.getKey(), val.getValue()))
-                                .collect(Collectors.joining(","));
-                        out.collect("传感器id为" + value.getId() + " " + collect);
+                        lastVcStatus.add(value.vc);
+                        // 在后面,out
+                        out.collect(value.getId()+"求和:"+lastVcStatus.get());
                     }
                 })
-                .print("map计数:");
+                .print("求和:");
 
         env.execute();
     }

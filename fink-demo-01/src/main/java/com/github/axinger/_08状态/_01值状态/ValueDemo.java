@@ -1,11 +1,11 @@
-package com._08状态._02listState;
+package com.github.axinger._08状态._01值状态;
 
-import cn.hutool.core.stream.StreamUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.axinger.bean.WaterSensor;
 import com.github.axinger.func.WaterSensorBeanMap;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.state.ListState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
+import org.apache.flink.api.common.state.ValueState;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -14,11 +14,9 @@ import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
 
 import java.time.Duration;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-public class ListDemo {
+public class ValueDemo {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -37,33 +35,34 @@ public class ListDemo {
         operator.keyBy(WaterSensor::getId)
                 .process(new KeyedProcessFunction<String, WaterSensor, String>() {
 
-                    ListState<Integer> lastVcStatus;
+                    ValueState<Integer> lastVcStatus;
 
                     @Override
                     public void open(Configuration parameters) throws Exception {
                         super.open(parameters);
                         // 初始化状态
-                        lastVcStatus = getRuntimeContext().getListState(new ListStateDescriptor<>("lastVcStatus", Types.INT));
+                        lastVcStatus = getRuntimeContext().getState(new ValueStateDescriptor<>("lastVcStatus", Types.INT));
                     }
 
                     @Override
                     public void processElement(WaterSensor value, KeyedProcessFunction<String, WaterSensor, String>.Context ctx, Collector<String> out) throws Exception {
 
-                        // 来一条,存入list
-                        lastVcStatus.add(value.getVc());
-                        // list取值,排序,保留最大的3个
-//                        List<Integer> collect1 = StreamSupport.stream(lastVcStatus.get().spliterator(), false)
-                        List<Integer> collect1 = StreamUtil.of(lastVcStatus.get(), false)
-                                .sorted(Comparator.reverseOrder()) //逆序
-                                .limit(3)
-                                .collect(Collectors.toList());
-                        out.collect(collect1.toString());
-                        // 更新
-                        lastVcStatus.update(collect1);
+                        Integer currentVc = value.getVc();
 
+                        //避免第一次就输入超过10
+                        if (Optional.ofNullable(lastVcStatus.value()).isPresent()) {
+                            // 取出上一条数据
+                            int lastVc = Optional.ofNullable(lastVcStatus.value()).orElse(0);
+                            if (Math.abs(currentVc - lastVc) > 10) {
+                                out.collect(StrUtil.format("当前水位={},上一个水位{},差值超过10", currentVc, lastVc));
+                            }
+                        }
+                        if (Optional.ofNullable(currentVc).isPresent()) {
+                            lastVcStatus.update(currentVc);
+                        }
                     }
                 })
-                .print("最大的3个:");
+                .print("相差超过10:");
 
         env.execute();
     }
