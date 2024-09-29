@@ -19,16 +19,12 @@
 package com.github.axinger;
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
-import com.alibaba.fastjson2.TypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.state.*;
 import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.connector.source.Source;
 import org.apache.flink.cdc.connectors.mysql.source.MySqlSource;
 import org.apache.flink.cdc.connectors.mysql.table.StartupOptions;
 import org.apache.flink.cdc.debezium.JsonDebeziumDeserializationSchema;
@@ -36,21 +32,16 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.BroadcastConnectedStream;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
-import org.apache.flink.streaming.api.datastream.ConnectedStreams;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.util.Collector;
-import org.apache.kafka.common.protocol.types.Field;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 
+@Slf4j
 public class FlinkCdc01_Test1 {
 
     public static void main(String[] args) throws Exception {
@@ -61,8 +52,8 @@ public class FlinkCdc01_Test1 {
 
         CheckpointConfig checkpointConfig = env.getCheckpointConfig();
         checkpointConfig.setCheckpointTimeout(6000);
-//        checkpointConfig.setCheckpointStorage("file:///D:/flink_point/ck_cdc_mysql");
-        checkpointConfig.setCheckpointStorage("hdfs://hadoop102:8020/ck_cdc_mysql");
+        checkpointConfig.setCheckpointStorage("file:///D:/flink_point/ck_cdc_mysql");
+//        checkpointConfig.setCheckpointStorage("hdfs://hadoop102:8020/ck_cdc_mysql");
         checkpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
         checkpointConfig.setMaxConcurrentCheckpoints(1); // 同时只存在一个
         checkpointConfig.setMinPauseBetweenCheckpoints(2000); //两个检测点之间最小间隔
@@ -118,6 +109,7 @@ public class FlinkCdc01_Test1 {
                     @Override
                     public JSONObject map(String value) {
                         System.out.println("value = " + value);
+//                        log.info("value = {}", value);
                         JSONObject jsonObject = JSONObject.parseObject(value);
                         return jsonObject.getJSONObject("after");
                     }
@@ -163,12 +155,12 @@ public class FlinkCdc01_Test1 {
                     }
 
                 })
-                .print("处理后数据");
+                .print("按age分组：");
     }
 
     // streamSource 非广播流
     // streamSource2 广播流
-    private static void broadcast(DataStreamSource<JSONObject> streamSource,  DataStreamSource<JSONObject> streamSource2 ) {
+    private static void broadcast(DataStreamSource<JSONObject> streamSource, DataStreamSource<JSONObject> streamSource2) {
 
         final String top = "a";
 
@@ -180,11 +172,17 @@ public class FlinkCdc01_Test1 {
         BroadcastConnectedStream<JSONObject, JSONObject> connect = streamSource.connect(broadcast);
 
 
-        connect.process(new BroadcastProcessFunction<JSONObject,JSONObject,JSONObject>(){
+        connect.process(new BroadcastProcessFunction<JSONObject, JSONObject, JSONObject>() {
 
             @Override
             public void open(Configuration parameters) throws Exception {
                 super.open(parameters);
+            }
+
+            @Override
+            public void close() throws Exception {
+                super.close();
+
             }
 
             @Override
@@ -217,6 +215,8 @@ public class FlinkCdc01_Test1 {
 
 //        streamSource.addSink()
 //        streamSource.sinkTo()
+
+        //TODO 1
 
     }
 
