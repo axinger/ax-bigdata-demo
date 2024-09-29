@@ -221,6 +221,14 @@
                 <artifactId>demo-common</artifactId>
                 <version>${version}</version>
             </dependency>
+
+
+            <dependency>
+                <groupId>org.apache.doris</groupId>
+                <artifactId>flink-doris-connector-1.18</artifactId>
+                <version>24.0.0</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
