@@ -51,15 +51,6 @@
 
     </dependencies>
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>apache-snapshots</id>-->
-<!--            <name>阿里云公共快照仓库</name>-->
-<!--            <url>https://maven.aliyun.com/repository/apache-snapshots</url>-->
-<!--        </repository>-->
-<!--    </repositories>-->
-
-
     <build>
         <plugins>
             <plugin>
