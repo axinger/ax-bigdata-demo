@@ -1,6 +1,7 @@
 package com.github.axinger._08合流;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.streaming.api.datastream.ConnectedStreams;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.TableResult;
@@ -50,6 +51,8 @@ public class Test02_SQLJoin {
 
         tEnv.createTemporaryView("dept", deptDS);
 
+
+//        ConnectedStreams<Emp, Dept> connect = empDS.connect(deptDS);
         // 默认内连接 inter，普通内外链接，需要设置状态保留时间
         TableResult result = tEnv.executeSql("select e.empNo,e.empName,e.deptNo,d.deptName from emp e join dept d on emp.deptNo = dept.deptNo");
         result.print();

@@ -10,7 +10,7 @@ import org.apache.flink.streaming.api.functions.co.ProcessJoinFunction;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.Collector;
 
-public class Test01_IntervalJoin {
+public class Test01_Api_IntervalJoin {
     public static void main(String[] args) {
 
 
