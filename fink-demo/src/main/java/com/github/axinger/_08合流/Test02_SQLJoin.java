@@ -1,16 +1,10 @@
 package com.github.axinger._08合流;
 
-import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
-import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.co.ProcessJoinFunction;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
-import org.apache.flink.util.Collector;
 
 import java.time.Duration;
 
@@ -25,7 +19,7 @@ public class Test02_SQLJoin {
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
 
 
-        // 状态保留时间
+        // 状态保留时间，生产环境中，需要设置
         tEnv.getConfig().setIdleStateRetention(Duration.ofSeconds(10));
 
 
@@ -65,8 +59,21 @@ public class Test02_SQLJoin {
 
         // 左外链接
         // 左右表先到，显示结果不一样， 有+I，-D，+I动作
-        tEnv.executeSql("select e.empNo,e.empName,e.deptNo,d.deptName from emp e left join dept d on emp.deptNo = dept.deptNo")
-                .print();
+//        tEnv.executeSql("select e.empNo,e.empName,e.deptNo,d.deptName from emp e left join dept d on emp.deptNo = dept.deptNo")
+//                .print();
+
+
+        // 写入kafka 使用  upsert-kafka
+        // 建表
+        tEnv.executeSql("CREATE emp_dept ");
+
+        //写入kafka  方式一
+        TableResult tableResult1 = tEnv.executeSql(" insert into em_dept  select .....");
+
+
+        //写入kafka  方式二，用 sqlQuery，分2步
+        TableResult tableResult2 = tEnv.sqlQuery("select .....").executeInsert("emp_dept");
+
 
     }
 }

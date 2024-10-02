@@ -9,7 +9,7 @@
         <version>2024.09.01-1.18</version>
     </parent>
 
-    <artifactId>fink-demo-01</artifactId>
+    <artifactId>fink-demo</artifactId>
 
     <dependencies>
 

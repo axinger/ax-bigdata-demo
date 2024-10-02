@@ -1,8 +1,7 @@
-package com.github.axinger;
+package com.github.axinger.doris;
 
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
-import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 public class DorisDemo {

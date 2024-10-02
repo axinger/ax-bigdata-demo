@@ -9,7 +9,7 @@
     <version>2024.09.01-1.18</version>
     <modules>
         <module>hadoop-demo</module>
-        <module>fink-demo-01</module>
+        <module>fink-demo</module>
         <module>flink-cdc-demo</module>
         <module>demo-common</module>
     </modules>
