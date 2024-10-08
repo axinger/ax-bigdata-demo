@@ -30,11 +30,11 @@ public class SinkKafkaDemo {
          */
         KafkaSink<String> kafkaSink = KafkaSink.<String>builder()
                 // 指定 kafka 的地址和端口
-                .setBootstrapServers("hadoop102:9092,hadoop103:9092,hadoop104:9092")
+                .setBootstrapServers("hadoop102:9092")
                 // 指定序列化器：指定Topic名称、具体的序列化
                 .setRecordSerializer(
                         KafkaRecordSerializationSchema.<String>builder()
-                                .setTopic("ws")
+                                .setTopic("test01")
                                 .setValueSerializationSchema(new SimpleStringSchema())
                                 .build()
                 )

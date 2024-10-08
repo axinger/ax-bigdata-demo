@@ -12,7 +12,9 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import javax.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
+// 从其他流读取数据，写入kafka中
 //自定义序列化器，实现带key的record:
 public class SinkKafkaWithKeyDemo {
     public static void main(String[] args) throws Exception {
@@ -35,17 +37,28 @@ public class SinkKafkaWithKeyDemo {
          * 4、返回一个 ProducerRecord对象，把key、value放进去
          */
         KafkaSink<String> kafkaSink = KafkaSink.<String>builder()
-                .setBootstrapServers("hadoop102:9092,hadoop103:9092,hadoop104:9092")
+                .setBootstrapServers("hadoop102:9092")
                 .setRecordSerializer(
                         new KafkaRecordSerializationSchema<String>() {
 
-                            @Nullable
                             @Override
                             public ProducerRecord<byte[], byte[]> serialize(String element, KafkaSinkContext context, Long timestamp) {
-                                String[] datas = element.split(",");
-                                byte[] key = datas[0].getBytes(StandardCharsets.UTF_8);
-                                byte[] value = element.getBytes(StandardCharsets.UTF_8);
-                                return new ProducerRecord<>("ws", key, value);
+                                System.out.println("element = " + element);
+
+
+                                String[] split = element.split(",");
+//                                byte[] key = split[0].getBytes(StandardCharsets.UTF_8);
+//                                byte[] value = element.getBytes(StandardCharsets.UTF_8);
+
+                                UserDTO userDTO = new UserDTO();
+                                userDTO.setName(split[0]);
+                                userDTO.setAge(Integer.parseInt(split[1]));
+                                userDTO.setBirthday(LocalDateTime.now());
+
+//                                String s = split[0];
+
+//                                return new ProducerRecord<>("test01", key, userDTO.toString().getBytes(StandardCharsets.UTF_8));
+                                return new ProducerRecord<>("test01", userDTO.toString().getBytes(StandardCharsets.UTF_8));
                             }
                         }
                 )
