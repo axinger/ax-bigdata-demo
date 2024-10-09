@@ -14,9 +14,6 @@
 
     <dependencies>
 
-
-
-
         <dependency>
             <groupId>com.github.axinger</groupId>
             <artifactId>demo-common</artifactId>

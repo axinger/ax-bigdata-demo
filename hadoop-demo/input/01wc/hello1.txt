@@ -1,3 +1,0 @@
-hello java
-hello php
-hello C
