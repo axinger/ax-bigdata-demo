@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.axinger</groupId>
         <artifactId>ax-flink-demo</artifactId>
-        <version>2024.09.01-1.18</version>
+        <version>2024.10.01-1.18-SNAPSHOT</version>
     </parent>
 
     <packaging>pom</packaging>
