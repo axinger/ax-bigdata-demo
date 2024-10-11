@@ -42,7 +42,7 @@ import org.apache.flink.util.Collector;
 import java.util.Properties;
 
 @Slf4j
-public class FlinkCdc01_Test1 {
+public class Demo4_api_process {
 
     public static void main(String[] args) throws Exception {
 
@@ -52,7 +52,7 @@ public class FlinkCdc01_Test1 {
 
         CheckpointConfig checkpointConfig = env.getCheckpointConfig();
         checkpointConfig.setCheckpointTimeout(6000);
-        checkpointConfig.setCheckpointStorage("file:///D:/flink_point/ck_cdc_mysql");
+//        checkpointConfig.setCheckpointStorage("file:///D:/flink_point/ck_cdc_mysql");
 //        checkpointConfig.setCheckpointStorage("hdfs://hadoop102:8020/ck_cdc_mysql");
         checkpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
         checkpointConfig.setMaxConcurrentCheckpoints(1); // 同时只存在一个
@@ -64,7 +64,7 @@ public class FlinkCdc01_Test1 {
         properties.setProperty("allowPublicKeyRetrieval", "true");
 
         //存档到hdfs,需要导入hadoop依赖,,指定hdfs用户名
-        System.setProperty("HADOOP_USER_NAME", "admin");
+//        System.setProperty("HADOOP_USER_NAME", "admin");
 
         MySqlSource<String> mySqlSource = MySqlSource.<String>builder()
 //                .hostname("localhost")
@@ -96,9 +96,9 @@ public class FlinkCdc01_Test1 {
         DataStreamSource<String> streamSource = env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "mysql-cdc-source");
 //        streamSource.print("原始数据");
 
-        keyByAge(streamSource);
+//        keyByAge(streamSource);
 
-
+        streamSource.print();
         env.execute("Print MySQL Snapshot + Binlog");
     }
 
