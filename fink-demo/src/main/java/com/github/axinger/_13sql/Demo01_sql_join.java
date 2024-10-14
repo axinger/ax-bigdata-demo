@@ -13,7 +13,7 @@ import java.time.Duration;
 
 
 @Slf4j
-public class JoinDemo {
+public class Demo01_sql_join {
 
     public static void main(String[] args) throws Exception {
 
