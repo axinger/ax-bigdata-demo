@@ -2,6 +2,9 @@ package com.github.axinger._11输出mysql;
 
 import com.github.axinger.bean.WaterSensor;
 import com.github.axinger.func.WaterSensorBeanMap;
+import org.apache.doris.flink.sink.batch.DorisBatchSink;
+import org.apache.flink.api.connector.sink.Sink;
+import org.apache.flink.api.connector.sink2.SinkWriter;
 import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
 import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
 import org.apache.flink.connector.jdbc.JdbcSink;
@@ -10,10 +13,11 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class SinkMySQL {
+public class ToMySQLJdbc {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -24,7 +28,7 @@ public class SinkMySQL {
                 .map(new WaterSensorBeanMap());
 
 
-        /**
+        /*
          * TODO 写入mysql
          * 1、只能用老的sink写法： addsink
          * 2、JDBCSink的4个参数:
@@ -57,9 +61,7 @@ public class SinkMySQL {
                         .build()
         );
 
-
-        sensorDS.addSink(jdbcSink);
-
+        sensorDS.addSink(jdbcSink).name("写入MySQL");
 
         env.execute();
     }

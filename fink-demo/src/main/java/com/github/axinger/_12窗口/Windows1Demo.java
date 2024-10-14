@@ -48,11 +48,6 @@ public class Windows1Demo {
 //        .aggregate()
         //全窗口函数:数据来了,不计算,存起来,窗口触发时候,计算并输出结果
 
-
-
         environment.execute();
-
-
-
     }
 }

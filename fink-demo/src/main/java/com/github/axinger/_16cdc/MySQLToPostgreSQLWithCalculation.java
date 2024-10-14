@@ -1,17 +1,10 @@
-package com.github.axinger;
+package com.github.axinger._16cdc;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
-import org.apache.flink.connector.jdbc.JdbcSink;
-import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.functions.ScalarFunction;
-import org.apache.flink.types.Row;
-import org.apache.flink.util.CloseableIterator;
 
 @Slf4j
 public class MySQLToPostgreSQLWithCalculation {

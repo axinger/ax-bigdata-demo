@@ -36,15 +36,19 @@ public class Windows2Demo {
 
         // TODO 2 指定窗口函数
         //增量聚合,来一个,计算一个,窗口触发计算结果
+        //  new WaterSensor(value1.getId(), value1.ts, value1.vc + value2.vc)
         SingleOutputStreamOperator<WaterSensor> operator = stream
                 .reduce((ReduceFunction<WaterSensor>) (value1, value2) ->
-                        new WaterSensor(value1.getId(), value1.ts, value1.vc + value2.vc));
+                        WaterSensor.builder()
+                                .id(value1.getId())
+                                .ts(value1.getTs())
+                                .vc(value1.getVc())
+                                .build()
+                       );
 
 
         operator.print();
 
-
         environment.execute();
-
     }
 }

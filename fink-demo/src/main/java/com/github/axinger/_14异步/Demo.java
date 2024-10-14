@@ -38,8 +38,7 @@ public class Demo {
                     public Emp map(String value) throws Exception {
                         return null;
                     }
-                })
-        ;
+                }).print();
 
     }
 }

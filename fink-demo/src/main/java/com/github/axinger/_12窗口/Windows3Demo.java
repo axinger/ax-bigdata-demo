@@ -21,12 +21,9 @@ public class Windows3Demo {
         SingleOutputStreamOperator<WaterSensor> ds = environment.socketTextStream("hadoop102", 7777)
                 .map(new WaterSensorBeanMap());
 
-
-        KeyedStream<WaterSensor, String> ks = ds.keyBy(WaterSensor::getId);
-
-
         //  TODO 1.指定窗口分配器
         // 1.1  没有key by的窗口,所有数据会进入一个子任务, 并行度为只能1,所以需要key by
+        KeyedStream<WaterSensor, String> ks = ds.keyBy(WaterSensor::getId);
         //ds.windowAll()
 
         //有key by窗口
@@ -43,7 +40,6 @@ public class Windows3Demo {
 
         SingleOutputStreamOperator<String> operator = stream
                 .aggregate(new AggregateFunction<WaterSensor, Integer, String>() {
-
 
                     // 创建累加器
                     @Override
@@ -69,7 +65,6 @@ public class Windows3Demo {
                         return null;
                     }
                 });
-
 
         operator.print();
 

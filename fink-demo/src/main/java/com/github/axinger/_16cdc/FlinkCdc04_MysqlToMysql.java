@@ -1,4 +1,4 @@
-package com.github.axinger;
+package com.github.axinger._16cdc;
 
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
