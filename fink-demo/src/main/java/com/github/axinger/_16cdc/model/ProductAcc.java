@@ -16,6 +16,6 @@ import java.time.LocalDateTime;
         public Integer maxId = 0;
         public String name;
         public LocalDateTime date;
-        public int totalQuantity = 0;
-        public int productionCount = 0;
+        public int sumQuantity = 0;
+        public int dataCount = 0;
     }
