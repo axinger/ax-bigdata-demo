@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -21,5 +23,5 @@ public class SysProduct {
 
     // 生产时间时间
 //    public long ts;
-    public String date;
+    public LocalDateTime date;
 }

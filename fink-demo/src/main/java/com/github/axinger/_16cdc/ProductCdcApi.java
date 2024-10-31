@@ -32,7 +32,7 @@ public class ProductCdcApi {
                             .id(Integer.valueOf(split[0]))
                             .name(split[1])
                             .quantity(Integer.valueOf(split[2]))
-                            .date(split[3])
+                            .date( LocalDateTime.parse(split[3], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                             .build();
                 })
                 .assignTimestampsAndWatermarks(
@@ -42,43 +42,75 @@ public class ProductCdcApi {
                                     @Override
                                     public long extractTimestamp(SysProduct element, long recordTimestamp) {
 
-                                        return LocalDateTime.parse(element.date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toEpochSecond(ZoneOffset.ofHours(0)) * 1000;
+                                        return element.date.toEpochSecond(ZoneOffset.ofHours(0)) * 1000;
                                     }
                                 })
                 )
 //                .keyBy(SysProduct::getName)  // 按产品名称分组
-                .keyBy(product -> product.getName() + "|" +    LocalDateTimeUtil.format(LocalDateTimeUtil.parse(product.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),"yyyy-MM-dd").toString())  // Combine name and date
+//                .keyBy(product -> product.getName() + "|" +    LocalDateTimeUtil.format(LocalDateTimeUtil.parse(product.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),"yyyy-MM-dd").toString())  // Combine name and date
+//                .keyBy(record -> record.name + "_" +LocalDateTimeUtil.format( record.date,"yyyy-MM-dd"))
+                .keyBy(record -> record.name)
+                .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+//                .window(TumblingEventTimeWindows.of(Time.days(1)))
+                .sum("quantity")
 
-                .window(TumblingEventTimeWindows.of(Time.seconds(3)))  // 使用滚动窗口，按天计算
-                .aggregate(new AggregateFunction<SysProduct, ProductAcc, ProductAcc>() {
-                    @Override
-                    public ProductAcc createAccumulator() {
-                        return new ProductAcc();
-                    }
+                .map(result -> {
 
-                    @Override
-                    public ProductAcc add(SysProduct value, ProductAcc accumulator) {
-                        accumulator.totalQuantity += value.getQuantity();
-                        accumulator.productionCount += 1;
-                        accumulator.name = value.getName();
-                        accumulator.date = value.getDate();
-                        return accumulator;
-                    }
+                    System.out.println("result = " + result);
 
-                    @Override
-                    public ProductAcc getResult(ProductAcc accumulator) {
-                        return accumulator;
-                    }
-
-                    @Override
-                    public ProductAcc merge(ProductAcc a, ProductAcc b) {
-                        a.totalQuantity += b.totalQuantity;
-                        a.productionCount += b.productionCount;
-                        return a;
-                    }
+                    return new AggregateResult(result.name, result.date.toLocalDate(), result.quantity);
                 })
+
+//                .aggregate(new AggregateFunction<SysProduct, ProductAcc, ProductAcc>() {
+//                    @Override
+//                    public ProductAcc createAccumulator() {
+//                        return new ProductAcc();
+//                    }
+//
+//                    @Override
+//                    public ProductAcc add(SysProduct value, ProductAcc accumulator) {
+//                        accumulator.totalQuantity += value.getQuantity();
+//                        accumulator.productionCount += 1;
+//                        accumulator.name = value.getName();
+//                        accumulator.date = value.getDate();
+//                        return accumulator;
+//                    }
+//
+//                    @Override
+//                    public ProductAcc getResult(ProductAcc accumulator) {
+//                        return accumulator;
+//                    }
+//
+//                    @Override
+//                    public ProductAcc merge(ProductAcc a, ProductAcc b) {
+//                        a.totalQuantity += b.totalQuantity;
+//                        a.productionCount += b.productionCount;
+//                        return a;
+//                    }
+//                })
                 .print("统计家电生产情况");
         env.execute();
+    }
+
+    public static class AggregateResult {
+        public String name;
+        public LocalDate date;
+        public int total;
+
+        public AggregateResult(String name, LocalDate date, int total) {
+            this.name = name;
+            this.date = date;
+            this.total = total;
+        }
+
+        @Override
+        public String toString() {
+            return "AggregateResult{" +
+                    "name='" + name + '\'' +
+                    ", date=" + date +
+                    ", total=" + total +
+                    '}';
+        }
     }
 
 }

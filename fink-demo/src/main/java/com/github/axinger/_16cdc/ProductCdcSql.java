@@ -7,7 +7,7 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 @Slf4j
-public class ProductCdc {
+public class ProductCdcSql {
 
     public static void main(String[] args) throws Exception {
 
