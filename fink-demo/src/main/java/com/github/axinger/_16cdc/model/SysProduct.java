@@ -6,20 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public  class SysProduct {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class SysProduct {
 
-        // 数据id
-        private Integer id;
-        // 产品名称
-        public String name;
+    // 数据id
+    public Integer id;
+    // 产品名称
+    public String name;
 
-        // 生产的数量,统计每个产品每日生产总数
-        private Integer quantity;
+    // 生产的数量,统计每个产品每日生产总数
+    public Integer quantity;
 
-        // 生产时间时间
+    // 生产时间时间
 //    public long ts;
-        public String date;
-    }
+    public String date;
+}

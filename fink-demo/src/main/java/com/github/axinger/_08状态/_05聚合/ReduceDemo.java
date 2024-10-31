@@ -22,16 +22,15 @@ public class ReduceDemo {
         env.setParallelism(1);
 
 
-        SingleOutputStreamOperator<WaterSensor> sensorDS = env
-                .socketTextStream("hadoop102", 7777)
+        env.socketTextStream("hadoop102", 7777)
                 .map(new WaterSensorBeanMap())
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy
                                 .<WaterSensor>forBoundedOutOfOrderness(Duration.ofSeconds(3))
                                 .withTimestampAssigner((element, ts) -> element.getTs() * 1000L)
-                );
+                )
 
-        sensorDS.keyBy(WaterSensor::getId)
+                .keyBy(WaterSensor::getId)
                 .process(
                         new KeyedProcessFunction<String, WaterSensor, String>() {
 

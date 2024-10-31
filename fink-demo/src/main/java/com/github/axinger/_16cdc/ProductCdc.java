@@ -49,9 +49,6 @@ public class ProductCdc {
         String sql = StrUtil.format("SELECT CONCAT(date_day, '-' ,name) AS id, name, total_quantity, date_day FROM ({})", query);
         Table result = tableEnv.sqlQuery(sql);
 
-//        result.execute().print();
-
-
         tableEnv.executeSql(
                 "CREATE TABLE sys_product_sum (" +
                         "id STRING NOT NULL," +
