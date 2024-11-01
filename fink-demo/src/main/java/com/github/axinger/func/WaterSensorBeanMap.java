@@ -7,6 +7,9 @@ import org.apache.flink.api.common.functions.MapFunction;
 @Slf4j
 public class WaterSensorBeanMap implements MapFunction<String, WaterSensor> {
 
+    //  1,1,11
+    // 2,2,12
+    // 3,3,13
 
     @Override
     public WaterSensor map(String value) throws Exception {

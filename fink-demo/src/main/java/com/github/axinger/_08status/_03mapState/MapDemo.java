@@ -1,11 +1,14 @@
-package com.github.axinger._08状态._02listState;
+package com.github.axinger._08status._03mapState;
 
 import cn.hutool.core.stream.StreamUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.axinger.bean.WaterSensor;
 import com.github.axinger.func.WaterSensorBeanMap;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.state.ListState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
+import org.apache.flink.api.common.state.MapState;
+import org.apache.flink.api.common.state.MapStateDescriptor;
+import org.apache.flink.api.common.state.StateTtlConfig;
+import org.apache.flink.api.common.time.Time;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -14,11 +17,10 @@ import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
 
 import java.time.Duration;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ListDemo {
+public class MapDemo {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -37,33 +39,31 @@ public class ListDemo {
         operator.keyBy(WaterSensor::getId)
                 .process(new KeyedProcessFunction<String, WaterSensor, String>() {
 
-                    ListState<Integer> lastVcStatus;
+                    MapState<Integer, Integer> lastVcStatus;
 
                     @Override
                     public void open(Configuration parameters) throws Exception {
                         super.open(parameters);
+                        MapStateDescriptor<Integer, Integer> stateDescriptor = new MapStateDescriptor<>("lastVcStatus", Types.INT, Types.INT);
+
+                        // 设置状态保留时间，比如统计当日的
+                        stateDescriptor.enableTimeToLive(StateTtlConfig.newBuilder(Time.days(1)).build());
                         // 初始化状态
-                        lastVcStatus = getRuntimeContext().getListState(new ListStateDescriptor<>("lastVcStatus", Types.INT));
+                        lastVcStatus = getRuntimeContext().getMapState(stateDescriptor);
                     }
 
                     @Override
                     public void processElement(WaterSensor value, KeyedProcessFunction<String, WaterSensor, String>.Context ctx, Collector<String> out) throws Exception {
 
-                        // 来一条,存入list
-                        lastVcStatus.add(value.getVc());
-                        // list取值,排序,保留最大的3个
-//                        List<Integer> collect1 = StreamSupport.stream(lastVcStatus.get().spliterator(), false)
-                        List<Integer> collect1 = StreamUtil.of(lastVcStatus.get(), false)
-                                .sorted(Comparator.reverseOrder()) //逆序
-                                .limit(3)
-                                .collect(Collectors.toList());
-                        out.collect(collect1.toString());
-                        // 更新
-                        lastVcStatus.update(collect1);
-
+                        Integer i = Optional.ofNullable(lastVcStatus.get(value.getVc())).orElse(0);
+                        lastVcStatus.put(value.getVc(), ++i);
+                        String collect = StreamUtil.of(lastVcStatus.entries())
+                                .map(val -> StrUtil.format("{}-{}", val.getKey(), val.getValue()))
+                                .collect(Collectors.joining(","));
+                        out.collect("传感器id为" + value.getId() + " " + collect);
                     }
                 })
-                .print("最大的3个:");
+                .print("map计数:");
 
         env.execute();
     }

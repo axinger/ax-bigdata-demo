@@ -1,4 +1,4 @@
-package com.github.axinger._08状态._03mapState;
+package com.github.axinger._08status._03mapState;
 
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.state.StateTtlConfig;

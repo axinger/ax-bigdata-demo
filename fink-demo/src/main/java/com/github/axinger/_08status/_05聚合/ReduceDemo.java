@@ -1,4 +1,4 @@
-package com.github.axinger._08状态._05聚合;
+package com.github.axinger._08status._05聚合;
 
 import com.github.axinger.bean.WaterSensor;
 import com.github.axinger.func.WaterSensorBeanMap;
@@ -9,7 +9,6 @@ import org.apache.flink.api.common.state.AggregatingStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
@@ -22,7 +21,7 @@ public class ReduceDemo {
         env.setParallelism(1);
 
 
-        env.socketTextStream("hadoop102", 7777)
+        env.socketTextStream("hadoop102", 8888)
                 .map(new WaterSensorBeanMap())
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy
