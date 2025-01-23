@@ -38,7 +38,7 @@ public class CheckpointingDemo {
         // 超时时间:默认10分钟
 
         //检查点最大数量,最好1,默认值1
-//        checkpointConfig.setMaxConcurrentCheckpoints(1);
+        checkpointConfig.setMaxConcurrentCheckpoints(1);
 
 
         //取消作业时候,数据保留外部系统

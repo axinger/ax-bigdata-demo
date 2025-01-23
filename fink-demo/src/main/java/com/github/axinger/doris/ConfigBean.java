@@ -10,23 +10,23 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlinkConfigBean {
+public class ConfigBean {
 
-    private FlinkConfig flink;
+    private FlinkConfigBean flink;
 
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class FlinkConfig {
-        private KafkaSource kafkaSource;
-        private DorisSink dorisSink;
+    public static class FlinkConfigBean {
+        private KafkaConfigBean kafka;
+        private DorisConfigBean doris;
     }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class KafkaSource {
+    public static class KafkaConfigBean {
         private String topic;
         private String bootstrapServers;
         private String format;
@@ -36,7 +36,7 @@ public class FlinkConfigBean {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class DorisSink {
+    public static class DorisConfigBean {
         private String fenodes;
         private String tableIdentifier;
         private String username;

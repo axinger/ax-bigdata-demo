@@ -5,10 +5,10 @@ import java.io.IOException;
 public class ReadYamlDemo {
     public static void main(String[] args) throws IOException {
 
-        FlinkConfigBean flinkConfigBean = ConfigLoader.loadConfig("application.yaml", FlinkConfigBean.class);
-        System.out.println("flinkConfigBean = " + flinkConfigBean);
+        ConfigBean configBean = ConfigLoader.loadConfig("application.yaml", ConfigBean.class);
+        System.out.println("flinkConfigBean = " + configBean);
 
-        String topic = flinkConfigBean.getFlink().getKafkaSource().getTopic();
+        String topic = configBean.getFlink().getKafka().getTopic();;
         System.out.println("topic = " + topic);
 
     }
