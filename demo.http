@@ -16,4 +16,19 @@ Content-Type: application/json
 }
 
 
+### 订阅 user_behavior2
+SUB user_behavior2
+Host: pulsar://hadoop203:6650
+
+### 发布 user_behavior2
+PUB user_behavior2
+Host: pulsar://hadoop203:6650
+Content-Type: application/json
+
+[
+  { "id": 1, "age": 22, "name": "jim" },
+  { "id": 2, "age": 22, "name": "tom" }
+]
+
+
 
