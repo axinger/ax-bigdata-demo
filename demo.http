@@ -1,0 +1,19 @@
+
+### 订阅
+SUB user_behavior
+Host: pulsar://hadoop203:6650
+
+
+### 发布
+PUB user_behavior
+Host: pulsar://hadoop203:6650
+Content-Type: application/json
+
+{
+  "id" : 1,
+  "age" : 22,
+  "name" : "jim"
+}
+
+
+

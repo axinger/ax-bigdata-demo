@@ -1,15 +1,14 @@
-flink:
-  kafka:
-    topic: your_topic_name
-    bootstrapServers: your_kafka_broker:9092
+kafka:
+  topic: your_topic_name
+  bootstrapServers: your_kafka_broker:9092
+  format: json
+  startupMode: earliest-offset
+doris:
+  fenodes: your_doris_fe_host:8030
+  tableIdentifier: your_db.your_table
+  username: your_username
+  password: your_password
+  labelPrefix: your_label_prefix
+  properties:
     format: json
-    startupMode: earliest-offset
-  doris:
-    fenodes: your_doris_fe_host:8030
-    tableIdentifier: your_db.your_table
-    username: your_username
-    password: your_password
-    labelPrefix: your_label_prefix
-    properties:
-      format: json
-      strip_outer_array: true
+    strip_outer_array: true

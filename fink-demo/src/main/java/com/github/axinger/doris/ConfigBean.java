@@ -12,16 +12,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class ConfigBean {
 
-    private FlinkConfigBean flink;
-
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class FlinkConfigBean {
-        private KafkaConfigBean kafka;
-        private DorisConfigBean doris;
-    }
+    private KafkaConfigBean kafka;
+    private DorisConfigBean doris;
 
     @Data
     @NoArgsConstructor

@@ -8,9 +8,8 @@ public class ReadYamlDemo {
         ConfigBean configBean = ConfigLoader.loadConfig("application.yaml", ConfigBean.class);
         System.out.println("flinkConfigBean = " + configBean);
 
-        String topic = configBean.getFlink().getKafka().getTopic();;
+        String topic = configBean.getKafka().getTopic();
         System.out.println("topic = " + topic);
-
     }
 }
 
