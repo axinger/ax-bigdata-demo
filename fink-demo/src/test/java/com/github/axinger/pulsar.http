@@ -1,0 +1,63 @@
+
+### 订阅 namespace1
+SUB non-persistent://axinger/demo1/user_behavior
+Host: pulsar://hadoop203:6650
+
+
+### 发布 namespace1
+PUB non-persistent://axinger/demo1/user_behavior
+Host: pulsar://hadoop203:6650
+Content-Type: application/json
+
+{
+  "id" : 1,
+  "age" : 22,
+  "name" : "jim"
+}
+
+### 订阅 namespace2
+SUB persistent://axinger/demo2/user_behavior
+Host: pulsar://hadoop203:6650
+
+### 发布 namespace2
+PUB persistent://axinger/demo2/user_behavior
+Host: pulsar://hadoop203:6650
+Content-Type: application/json
+
+{
+  "id" : 1,
+  "age" : 22,
+  "name" : "jim"
+}
+
+
+### 发布 default
+#PUB persistent://public/demo1/user_behavior
+PUB persistent://public/demo1/user_behavior
+Host: pulsar://hadoop203:6650
+Content-Type: application/json
+
+{
+  "id" : 1,
+  "age" : 22,
+  "name" : "jim"
+}
+
+
+
+### 订阅 user_behavior2
+SUB user_behavior2
+Host: pulsar://hadoop203:6650
+
+### 发布 user_behavior2
+PUB user_behavior2
+Host: pulsar://hadoop203:6650
+Content-Type: application/json
+
+[
+  { "id": 1, "age": 22, "name": "jim" },
+  { "id": 2, "age": 22, "name": "tom" }
+]
+
+
+
