@@ -1,5 +1,7 @@
 package com.github.axinger._16cdc;
 
+import org.apache.flink.streaming.api.CheckpointingMode;
+import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
@@ -15,7 +17,13 @@ public class ProductSum {
         env.setParallelism(1); // 生产环境建议根据实际情况调整并行度
         // 生产环境建议添加检查点配置（可选）
         env.enableCheckpointing(60_000); // 每60秒做一次检查点
-        env.getCheckpointConfig().setCheckpointTimeout(30_000);
+
+        CheckpointConfig checkpointConfig = env.getCheckpointConfig();
+        checkpointConfig.setCheckpointTimeout(30_000);
+        checkpointConfig.setCheckpointStorage("file:///D:\\flink_point\\product_sum");
+        checkpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+        checkpointConfig.setMaxConcurrentCheckpoints(1); // 同时只存在一个
+        checkpointConfig.setMinPauseBetweenCheckpoints(2000); //两个检测点之间最小间隔
 
         // 2. 创建 Table 环境（流模式）
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().build();
@@ -56,7 +64,7 @@ public class ProductSum {
 
 
         // 执行 DDL 创建表
-        tableEnv.executeSql(sourceDDL);
+        tableEnv.executeSql(sourceDDL).print();
         tableEnv.executeSql(sinkDDL);
 
         // 5. 定义聚合逻辑（按产品ID和日期分组统计）
@@ -71,7 +79,7 @@ public class ProductSum {
                         + "GROUP BY product_id, CAST(inventory_date AS DATE)"; // 分组键
 
         // 6. 执行统计任务
-        tableEnv.executeSql(statisticsSQL);
+        tableEnv.executeSql(statisticsSQL).print();
 
         // 7. 启动任务
         env.execute("Flink CDC Daily Product Statistics");
