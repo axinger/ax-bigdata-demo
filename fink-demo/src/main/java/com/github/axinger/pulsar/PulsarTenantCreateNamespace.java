@@ -3,7 +3,6 @@ package com.github.axinger.pulsar;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
-import org.apache.pulsar.client.admin.PulsarAdminBuilder;
 import org.apache.pulsar.client.api.PulsarClientException;
 
 import java.util.List;
@@ -13,9 +12,9 @@ public class PulsarTenantCreateNamespace {
     public static void main(String[] args) throws PulsarAdminException, PulsarClientException {
         // 初始化PulsarAdmin客户端
         String serviceHttpUrl = "http://hadoop203:18080"; // 替换为你的 Pulsar Admin URL
-        PulsarAdminBuilder builder = PulsarAdmin.builder()
-                .serviceHttpUrl(serviceHttpUrl); // 替换成你的Pulsar服务HTTP URL
-        PulsarAdmin admin = builder.build();
+        PulsarAdmin admin = PulsarAdmin.builder()
+                .serviceHttpUrl(serviceHttpUrl) // 替换成你的Pulsar服务HTTP URL
+                .build();
 
         // 定义租户和命名空间名称
         String tenantNew = "axinger"; // 替换成你的租户名称

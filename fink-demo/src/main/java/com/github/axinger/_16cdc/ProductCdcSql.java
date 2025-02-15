@@ -67,8 +67,5 @@ public class ProductCdcSql {
 
         // 将结果写入db
         result.executeInsert("sys_product_sum");
-
     }
-
-
 }
