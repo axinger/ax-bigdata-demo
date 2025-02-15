@@ -13,6 +13,7 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
  * <p>
  * 作用：允许5秒的数据延迟/乱序，确保在计算每日统计时能正确处理晚到的入库记录
  * 示例场景：当 inventory_date=2024-03-20 23:59:58 的数据在 2024-03-21 00:00:03 到达时，仍会计入3月20日的统计
+ * 水位线,不适用实时统计每日数据,是用来攒批的,比如攒5分钟的一些数据,再计算,减少开销
  * 滚动窗口配置
  */
 public class ProductSumWaterMark {
@@ -84,8 +85,18 @@ public class ProductSumWaterMark {
                         + "FROM inventory "
                         + "GROUP BY "
                         + "  product_id, "
+//                        + "  TUMBLE(inventory_date, INTERVAL '1' DAY)"; // 按天滚动窗口
                         + "  TUMBLE(inventory_date, INTERVAL '1' DAY)"; // 按天滚动窗口
 
+//        String statisticsSQL =
+//                "INSERT INTO daily_statistics "
+//                        + "SELECT "
+//                        + "  product_id, "
+//                        + "  CAST(SUM(quantity) AS INT) AS total_quantity, "  // 累计入库量
+//                        + "  CAST(COUNT(*) AS INT) AS inventory_count, "      // 当日入库次数
+//                        + "  CAST(inventory_date AS DATE) AS statistics_date " // 转日期类型
+//                        + "FROM inventory "
+//                        + "GROUP BY product_id, CAST(inventory_date AS DATE)"; // 分组键
         // 6. 执行统计任务
         tableEnv.executeSql(statisticsSQL).print();
 
