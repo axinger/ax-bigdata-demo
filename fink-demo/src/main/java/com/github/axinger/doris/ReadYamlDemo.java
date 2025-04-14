@@ -5,7 +5,7 @@ import java.io.IOException;
 public class ReadYamlDemo {
     public static void main(String[] args) throws IOException {
 
-        ConfigBean configBean = ConfigLoader.loadConfig("application.yaml", ConfigBean.class);
+        ConfigBean configBean = ConfigLoader.loadConfigYaml("application.yaml", ConfigBean.class);
         System.out.println("flinkConfigBean = " + configBean);
 
         String topic = configBean.getKafka().getTopic();

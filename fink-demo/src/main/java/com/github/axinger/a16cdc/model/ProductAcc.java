@@ -1,4 +1,4 @@
-package com.github.axinger._16cdc.model;
+package com.github.axinger.a16cdc.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

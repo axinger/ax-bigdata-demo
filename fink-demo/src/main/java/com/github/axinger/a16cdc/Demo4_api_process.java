@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.github.axinger._16cdc;
+package com.github.axinger.a16cdc;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;

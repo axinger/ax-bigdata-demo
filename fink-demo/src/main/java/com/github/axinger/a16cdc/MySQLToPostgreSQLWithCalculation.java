@@ -1,4 +1,4 @@
-package com.github.axinger._16cdc;
+package com.github.axinger.a16cdc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -7,7 +7,7 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.functions.ScalarFunction;
 
 @Slf4j
-public class Demo3_sql_to_db {
+public class MySQLToPostgreSQLWithCalculation {
 
     public static void main(String[] args) throws Exception {
         // 设置执行环境
@@ -65,7 +65,7 @@ public class Demo3_sql_to_db {
                 "ON a.dept_code = b.dept_code";
 
         Table joinedTable = tableEnv.sqlQuery(joinSql);
-//        joinedTable.execute().print();
+////        joinedTable.execute().print();
 
 
         // 注册PostgreSQL接收表
@@ -75,7 +75,7 @@ public class Demo3_sql_to_db {
                         "emp_code INT," +
                         "emp_name STRING," +
                         "dept STRING, " +
-                        " PRIMARY KEY ( id ) NOT ENFORCED \n" +
+                        " PRIMARY KEY ( id ) NOT ENFORCED"+
                         ") WITH (" +
                         "'connector' = 'jdbc'," +
                         "'url' = 'jdbc:mysql://hadoop102:3306/ax_test2'," + // 替换为实际的URL
@@ -87,26 +87,53 @@ public class Demo3_sql_to_db {
 //                        "'sink.flush-on-checkpoint' = 'true'" +
                         ")"
         );
-
+//
 //        // 将JOIN的结果写入PostgreSQL
-        joinedTable.executeInsert("postgres_table_sink");
+//        joinedTable.executeInsert("postgres_table_sink");
 
 
         // 执行查询并将数据插入t2表
         // join表， CRUD, 都会自动更新， 直接插入目标表就行了，目标表，不需要删除
-//        tableEnv.executeSql(
-//                "INSERT INTO sys_emp_dept (id,emp_code,emp_name, dept) " +
-//                        joinSql
-//        );
+        tableEnv.executeSql(
+                "INSERT INTO sys_emp_dept (id,emp_code,emp_name, dept) " +
+                        joinSql
+        );
 
+        // 将Table转换为DataStream
+//        DataStream<Row> resultStream = tableEnv.toDataStream(joinedTable);
+//
+//        // 使用JdbcSink将数据插入到t2表中
+//        resultStream.addSink(JdbcSink.sink(
+//                "INSERT INTO table_t2(id, emp_code, emp_name,dept) VALUES(?,?,?,?)",
+//                (ps, t) -> {
+//                    Object empCode = t.getField("emp_code");
+//                    Object empName = t.getField("emp_name");
+//                    Object dept = t.getField("dept");
+//
+////                    ps.setInt(1, (Integer)t.getField(0));
+////                    ps.setString(2, ((String)t.getField(1)).toUpperCase()); // 转换名字为大写
+////                    ps.setString(3, (String)t.getField(2));
+//                },
+//                new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
+//                        .withUrl("jdbc:postgresql://localhost:5432/postgres") // 替换为实际的URL
+//                        .withDriverName("org.postgresql.Driver")
+//                        .withUsername("user")
+//                        .withPassword("pass")
+//                        .build()
+////                new JdbcExecutionOptions.JdbcExecutionOptionsBuilder()
+////                        .withBatchIntervalMs(2000)
+////                        .withBatchSize(5000)
+////                        .build()
+//        ));
 
         // 执行任务
         env.execute("MySQL to PostgreSQL with Calculation");
     }
 
     public static class NameToCalculation extends ScalarFunction {
-        public String eval(Integer code, String name) {
-            return code + "-" + name;
+        public String eval(Integer code,String name) {
+            return code+"-"+name;
+
         }
     }
 }

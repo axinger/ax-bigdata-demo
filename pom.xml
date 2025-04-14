@@ -22,10 +22,11 @@
 
         <hadoop.version>3.3.6</hadoop.version>
         <flink.version>1.18.1</flink.version>
+<!--        <flink.version>1.17.2</flink.version>-->
         <scala.version>2.12</scala.version>
         <flink-cdc.version>3.2.0</flink-cdc.version>
         <flink-connector.version>3.2.0-1.18</flink-connector.version>
-        <!--        <flink-connector.version>3.1.0-1.17</flink-connector.version>-->
+<!--                <flink-connector.version>3.1.0-1.17</flink-connector.version>-->
         <hbase.version>2.4.11</hbase.version>
         <fastjson.version>2.0.53</fastjson.version>
         <log4j.version>2.23.1</log4j.version>

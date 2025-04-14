@@ -1,4 +1,4 @@
-package com.github.axinger._16cdc.model;
+package com.github.axinger.a16cdc.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.flink.api.common.typeinfo.TypeInformation;

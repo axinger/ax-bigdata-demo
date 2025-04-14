@@ -1,11 +1,8 @@
-package com.github.axinger._16cdc;
+package com.github.axinger.a16cdc;
 
-import cn.hutool.core.date.LocalDateTimeUtil;
-import com.github.axinger._16cdc.model.ProductAcc;
-import com.github.axinger._16cdc.model.SysProduct;
+import com.github.axinger.a16cdc.model.SysProduct;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;

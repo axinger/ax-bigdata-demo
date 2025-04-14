@@ -1,8 +1,7 @@
-package com.github.axinger._12窗口;
+package com.github.axinger.a12windows;
 
 import com.github.axinger.bean.WaterSensor;
 import com.github.axinger.func.WaterSensorBeanMap;
-import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.datastream.WindowedStream;
@@ -11,14 +10,14 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTime
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 
-public class Windows2Demo {
+public class Windows1Demo {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment environment = StreamExecutionEnvironment
                 .getExecutionEnvironment();
         environment.setParallelism(1);
 
 
-        SingleOutputStreamOperator<WaterSensor> ds = environment.socketTextStream("hadoop102", 7777)
+        SingleOutputStreamOperator<WaterSensor> ds = environment.socketTextStream("hadoop102", 8888)
                 .map(new WaterSensorBeanMap());
 
 
@@ -31,23 +30,23 @@ public class Windows2Demo {
 
         //有key by窗口
         //基于时间类型窗口
-        WindowedStream<WaterSensor, String, TimeWindow> stream = ks.window(TumblingProcessingTimeWindows.of(Time.seconds(10)));// 滚动窗口, 窗口长度10
+        WindowedStream<WaterSensor, String, TimeWindow> stream = ks.window(TumblingProcessingTimeWindows.of(Time.seconds(10)));// 滚动窗口, 窗口长度10s
 
+//        ks.window(SlidingProcessingTimeWindows.of(Time.seconds(10),Time.seconds(2)))   // 滑动窗口, 窗口长度10s,滑动步长2s
+//        ks.window(ProcessingTimeSessionWindows.withGap(Time.seconds(5)))   // 会话窗口, 超时间隔5s,没有数据来,就认为是一个窗口任务
+
+        //基于计数
+//        ks.countWindow(5)  //滚动窗口, 窗口长度5个元素
+
+//        ks.countWindow(5,2) // 滑动窗口,窗口长度5个元素, 滑动步长2个元素
+//        ks.window(GlobalWindows.create()); //全局窗口,计数窗口底层,自定义,很少用
 
         // TODO 2 指定窗口函数
         //增量聚合,来一个,计算一个,窗口触发计算结果
-        //  new WaterSensor(value1.getId(), value1.ts, value1.vc + value2.vc)
-        SingleOutputStreamOperator<WaterSensor> operator = stream
-                .reduce((ReduceFunction<WaterSensor>) (value1, value2) ->
-                        WaterSensor.builder()
-                                .id(value1.getId())
-                                .ts(value1.getTs())
-                                .vc(value1.getVc())
-                                .build()
-                       );
-
-
-        operator.print();
+//        stream
+//                .reduce()
+//        .aggregate()
+        //全窗口函数:数据来了,不计算,存起来,窗口触发时候,计算并输出结果
 
         environment.execute();
     }

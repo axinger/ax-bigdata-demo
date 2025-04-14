@@ -1,4 +1,4 @@
-package com.github.axinger._16cdc;
+package com.github.axinger.a16cdc;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.cdc.connectors.mysql.source.MySqlSource;

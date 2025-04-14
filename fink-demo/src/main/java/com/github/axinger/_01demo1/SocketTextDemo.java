@@ -67,6 +67,7 @@ public class SocketTextDemo {
         sum.keyBy(value -> value.f0)
                 .process(new KeyedProcessFunction<String, Tuple2<String, Integer>, Object>() {
                     ReducingState<Map<String, Integer>> state;
+
                     @Override
                     public void open(Configuration parameters) throws Exception {
                         super.open(parameters);
@@ -84,7 +85,9 @@ public class SocketTextDemo {
 
                     @Override
                     public void processElement(Tuple2<String, Integer> value, KeyedProcessFunction<String, Tuple2<String, Integer>, Object>.Context ctx, Collector<Object> out) throws Exception {
-                        state.add(Map.of(value.f0, value.f1));
+                        Map<String, Integer> map1 = new HashMap<>();
+                        map1.put(value.f0, value.f1);
+                        state.add(map1);
                         System.out.println("state.get() = " + state.get());
                     }
                 });

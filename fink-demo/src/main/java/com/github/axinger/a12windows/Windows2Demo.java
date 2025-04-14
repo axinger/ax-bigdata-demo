@@ -1,8 +1,8 @@
-package com.github.axinger._12窗口;
+package com.github.axinger.a12windows;
 
 import com.github.axinger.bean.WaterSensor;
 import com.github.axinger.func.WaterSensorBeanMap;
-import org.apache.flink.api.common.functions.AggregateFunction;
+import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.datastream.WindowedStream;
@@ -11,7 +11,7 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTime
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 
-public class Windows3Demo {
+public class Windows2Demo {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment environment = StreamExecutionEnvironment
                 .getExecutionEnvironment();
@@ -21,9 +21,12 @@ public class Windows3Demo {
         SingleOutputStreamOperator<WaterSensor> ds = environment.socketTextStream("hadoop102", 7777)
                 .map(new WaterSensorBeanMap());
 
+
+        KeyedStream<WaterSensor, String> ks = ds.keyBy(WaterSensor::getId);
+
+
         //  TODO 1.指定窗口分配器
         // 1.1  没有key by的窗口,所有数据会进入一个子任务, 并行度为只能1,所以需要key by
-        KeyedStream<WaterSensor, String> ks = ds.keyBy(WaterSensor::getId);
         //ds.windowAll()
 
         //有key by窗口
@@ -33,38 +36,16 @@ public class Windows3Demo {
 
         // TODO 2 指定窗口函数
         //增量聚合,来一个,计算一个,窗口触发计算结果
-        // aggregate 3个泛型,可以不一样
-        // 类型1: 输入类型
-        // 类型2: 累加器类型
-        // 类型3: 输出类型
+        //  new WaterSensor(value1.getId(), value1.ts, value1.vc + value2.vc)
+        SingleOutputStreamOperator<WaterSensor> operator = stream
+                .reduce((ReduceFunction<WaterSensor>) (value1, value2) ->
+                        WaterSensor.builder()
+                                .id(value1.getId())
+                                .ts(value1.getTs())
+                                .vc(value1.getVc())
+                                .build()
+                       );
 
-        SingleOutputStreamOperator<String> operator = stream
-                .aggregate(new AggregateFunction<WaterSensor, Integer, String>() {
-
-                    // 创建累加器
-                    @Override
-                    public Integer createAccumulator() {
-                        return 0;
-                    }
-
-                    // 聚合逻辑
-                    @Override
-                    public Integer add(WaterSensor value, Integer accumulator) {
-                        return value.getVc() + accumulator;
-                    }
-
-                    // 获取最终结果
-                    @Override
-                    public String getResult(Integer accumulator) {
-                        return "结果"+ accumulator;
-                    }
-
-                    // 只有会话窗口才会用到
-                    @Override
-                    public Integer merge(Integer a, Integer b) {
-                        return null;
-                    }
-                });
 
         operator.print();
 

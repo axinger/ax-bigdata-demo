@@ -1,25 +1,18 @@
-package com.github.axinger._16cdc;
+package com.github.axinger.a16cdc;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.axinger._16cdc.model.ProductAcc;
-import com.github.axinger._16cdc.model.SysProduct;
-import com.github.axinger._16cdc.model.SysProductMap;
+import com.github.axinger.a16cdc.model.ProductAcc;
+import com.github.axinger.a16cdc.model.SysProduct;
+import com.github.axinger.a16cdc.model.SysProductMap;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
-import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.api.windowing.triggers.ContinuousProcessingTimeTrigger;
-import org.apache.flink.streaming.api.windowing.triggers.CountTrigger;
-import org.apache.flink.streaming.api.windowing.triggers.ProcessingTimeTrigger;
-import org.apache.flink.util.Collector;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 public class ProductAggregation {
 

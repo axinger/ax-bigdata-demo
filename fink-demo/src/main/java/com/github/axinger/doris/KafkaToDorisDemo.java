@@ -9,7 +9,7 @@ public class KafkaToDorisDemo {
         // 创建执行环境
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
-        ConfigBean configBean = ConfigLoader.loadConfig("application.yaml", ConfigBean.class);
+        ConfigBean configBean = ConfigLoader.loadConfigYaml("application.yaml", ConfigBean.class);
         ConfigBean.KafkaConfigBean kafka = configBean.getKafka();
 
         ConfigBean.DorisConfigBean doris = configBean.getDoris();

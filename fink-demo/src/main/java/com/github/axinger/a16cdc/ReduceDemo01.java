@@ -1,8 +1,8 @@
-package com.github.axinger._16cdc;
+package com.github.axinger.a16cdc;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
-import com.github.axinger._16cdc.model.SysProduct;
-import com.github.axinger._16cdc.model.SysProductMap;
+import com.github.axinger.a16cdc.model.SysProduct;
+import com.github.axinger.a16cdc.model.SysProductMap;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.ReducingState;
 import org.apache.flink.api.common.state.ReducingStateDescriptor;

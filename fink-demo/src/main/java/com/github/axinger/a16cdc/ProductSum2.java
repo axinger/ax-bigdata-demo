@@ -1,4 +1,4 @@
-package com.github.axinger._16cdc;
+package com.github.axinger.a16cdc;
 
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
@@ -9,14 +9,8 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 /**
  * 基于 Flink CDC 实时统计每日产品入库量和入库次数
  * 数据流向：MySQL (inventory) → Flink 实时统计 → MySQL (daily_statistics)
- * <p>
- * <p>
- * 作用：允许5秒的数据延迟/乱序，确保在计算每日统计时能正确处理晚到的入库记录
- * 示例场景：当 inventory_date=2024-03-20 23:59:58 的数据在 2024-03-21 00:00:03 到达时，仍会计入3月20日的统计
- * 水位线,不适用实时统计每日数据,是用来攒批的,比如攒5分钟的一些数据,再计算,减少开销
- * 滚动窗口配置
  */
-public class ProductSumWaterMark {
+public class ProductSum2 {
     public static void main(String[] args) throws Exception {
         // 1. 初始化流处理环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -26,7 +20,7 @@ public class ProductSumWaterMark {
 
         CheckpointConfig checkpointConfig = env.getCheckpointConfig();
         checkpointConfig.setCheckpointTimeout(30_000);
-        checkpointConfig.setCheckpointStorage("file:///D:\\flink_point\\product_sum2");
+        checkpointConfig.setCheckpointStorage("file:///D:\\flink_point\\product_sum");
         checkpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
         checkpointConfig.setMaxConcurrentCheckpoints(1); // 同时只存在一个
         checkpointConfig.setMinPauseBetweenCheckpoints(2000); //两个检测点之间最小间隔
@@ -41,7 +35,6 @@ public class ProductSumWaterMark {
                 + "  product_id STRING,"
                 + "  quantity INT,"
                 + "  inventory_date TIMESTAMP(3),"
-                + "  WATERMARK FOR inventory_date AS inventory_date - INTERVAL '5' SECOND," // 新增水位线定义
                 + "  PRIMARY KEY (id) NOT ENFORCED"
                 + ") WITH ("
                 + "  'connector' = 'mysql-cdc',"
@@ -79,24 +72,12 @@ public class ProductSumWaterMark {
                 "INSERT INTO daily_statistics "
                         + "SELECT "
                         + "  product_id, "
-                        + "  CAST(SUM(quantity) AS INT) AS total_quantity, "  // 添加类型转换
-                        + "  CAST(COUNT(*) AS INT) AS inventory_count, "      // 添加类型转换
-                        + "  CAST(TUMBLE_END(inventory_date, INTERVAL '1' DAY) AS DATE) AS statistics_date "
+                        + "  CAST(SUM(quantity) AS INT) AS total_quantity, "  // 累计入库量
+                        + "  CAST(COUNT(*) AS INT) AS inventory_count, "      // 当日入库次数
+                        + "  CAST(inventory_date AS DATE) AS statistics_date " // 转日期类型
                         + "FROM inventory "
-                        + "GROUP BY "
-                        + "  product_id, "
-//                        + "  TUMBLE(inventory_date, INTERVAL '1' DAY)"; // 按天滚动窗口
-                        + "  TUMBLE(inventory_date, INTERVAL '1' DAY)"; // 按天滚动窗口
+                        + "GROUP BY product_id, CAST(inventory_date AS DATE)"; // 分组键
 
-//        String statisticsSQL =
-//                "INSERT INTO daily_statistics "
-//                        + "SELECT "
-//                        + "  product_id, "
-//                        + "  CAST(SUM(quantity) AS INT) AS total_quantity, "  // 累计入库量
-//                        + "  CAST(COUNT(*) AS INT) AS inventory_count, "      // 当日入库次数
-//                        + "  CAST(inventory_date AS DATE) AS statistics_date " // 转日期类型
-//                        + "FROM inventory "
-//                        + "GROUP BY product_id, CAST(inventory_date AS DATE)"; // 分组键
         // 6. 执行统计任务
         tableEnv.executeSql(statisticsSQL).print();
 
