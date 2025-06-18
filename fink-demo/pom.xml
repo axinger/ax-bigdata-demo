@@ -16,7 +16,7 @@
 
         <dependency>
             <groupId>com.github.axinger</groupId>
-            <artifactId>demo-common</artifactId>
+            <artifactId>flink-common</artifactId>
         </dependency>
 
         <dependency>

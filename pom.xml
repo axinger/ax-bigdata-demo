@@ -9,7 +9,8 @@
     <version>2024.10.01-1.18-SNAPSHOT</version>
     <modules>
         <module>fink-demo</module>
-        <module>demo-common</module>
+        <module>flink-common</module>
+        <module>spark-demo</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -31,7 +32,6 @@
         <fastjson.version>2.0.53</fastjson.version>
         <log4j.version>2.23.1</log4j.version>
     </properties>
-
 
     <dependencyManagement>
         <dependencies>
@@ -224,7 +224,7 @@
 
             <dependency>
                 <groupId>com.github.axinger</groupId>
-                <artifactId>demo-common</artifactId>
+                <artifactId>flink-common</artifactId>
                 <version>${version}</version>
             </dependency>
 
@@ -250,7 +250,6 @@
 
         </dependencies>
     </dependencyManagement>
-
 
     <dependencies>
 
@@ -375,4 +374,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

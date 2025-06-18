@@ -9,7 +9,7 @@
         <version>2024.10.01-1.18-SNAPSHOT</version>
     </parent>
 
-    <artifactId>demo-common</artifactId>
+    <artifactId>flink-common</artifactId>
 
     <dependencies>
 
