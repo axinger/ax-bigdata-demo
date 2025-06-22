@@ -5,13 +5,30 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.axinger</groupId>
-        <artifactId>ax-flink-demo</artifactId>
+        <artifactId>ax-bigdata-demo</artifactId>
         <version>2024.10.01-1.18-SNAPSHOT</version>
     </parent>
 
     <artifactId>flink-common</artifactId>
 
     <dependencies>
+
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
