@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.axinger</groupId>
+        <artifactId>ax-bigdata-demo</artifactId>
+        <version>2024.10.01-1.18-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>hadoop-demo</artifactId>
+    <version>1.0.0</version>
+
+    <packaging>pom</packaging>
+    <modules>
+        <module>HdfsDemo</module>
+        <module>MRDemo</module>
+        <module>YarnDemo</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-client</artifactId>
+                <version>3.2.3</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.26</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.3.8</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.3.8</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>5.8.21</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>ch.qos.logback</groupId>-->
+        <!--            <artifactId>logback-core</artifactId>-->
+        <!--        </dependency>-->
+
+
+        <!--        <dependency>-->
+        <!--            <groupId>ch.qos.logback</groupId>-->
+        <!--            <artifactId>logback-classic</artifactId>-->
+        <!--        </dependency>-->
+
+
+    </dependencies>
+
+</project>

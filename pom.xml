@@ -11,6 +11,7 @@
         <module>fink-demo</module>
         <module>flink-common</module>
         <module>spark-demo</module>
+        <module>hadoop-demo</module>
     </modules>
     <packaging>pom</packaging>
 
