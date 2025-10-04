@@ -36,7 +36,8 @@ public class StreamDemo {
         //按照第二个元素聚合
         SingleOutputStreamOperator<Tuple2<String, Integer>> sum = keyBy.sum(1);
         //输出
-        sum.print();
+//        sum.print();
+        sum.print("统计单词个数");
         //流处理,执行,启动操作
         environment.execute();
 
